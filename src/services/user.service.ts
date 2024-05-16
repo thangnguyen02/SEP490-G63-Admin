@@ -13,7 +13,7 @@ interface RegisterData {
 }
 export const login = async ({ email, password }: LoginData) => {
   try {
-    const response = await axiosInstant.post('public/auth/login', { email, password })
+    const response = await adminInstance.post('public/auth/login', { email, password })
     return response.data
   } catch (error) {
     console.log(error)

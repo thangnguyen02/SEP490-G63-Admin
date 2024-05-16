@@ -22,7 +22,7 @@ export const provinceInstance = axios.create({
     'Content-Type': 'application/json'
   }
 })
-axiosInstance.interceptors.request.use(
+adminInstance.interceptors.request.use(
   (config) => {
     const accessToken = getAccessToken()
     if (accessToken) {
@@ -36,7 +36,7 @@ axiosInstance.interceptors.request.use(
   }
 )
 
-axiosInstance.interceptors.response.use(
+adminInstance.interceptors.response.use(
   (response) => {
     return response
   },
