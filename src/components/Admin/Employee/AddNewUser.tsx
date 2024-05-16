@@ -9,7 +9,7 @@ type FromType = {
   email: string
   password: string
 }
-const AddNewEmployee = () => {
+const AddNewUser = () => {
   const {
     register,
     handleSubmit,
@@ -120,4 +120,4 @@ const AddNewEmployee = () => {
     </form>
   )
 }
-export default AddNewEmployee
+export default AddNewUser

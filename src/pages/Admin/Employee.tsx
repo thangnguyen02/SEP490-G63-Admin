@@ -1,8 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import AddNewEmployee from '~/components/Admin/Employee/AddNewEmployee'
+import AddNewUser from '~/components/Admin/Employee/AddNewUser'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import ViewEmployee from '~/components/Admin/Employee/ViewEmployee'
+import ViewUser from '~/components/Admin/Employee/ViewUser'
 const Employee = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [viewDetail, setViewDetail] = useState(false)
@@ -142,9 +142,9 @@ const Employee = () => {
               >
                 <Dialog.Panel className='w-[100vw] md:w-[60vw] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
                   <Dialog.Title as='h3' className='text-lg font-medium leading-6 text-gray-900'>
-                    Add New Employee
+                    Add New User
                   </Dialog.Title>
-                  <AddNewEmployee />
+                  <AddNewUser />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
@@ -178,9 +178,9 @@ const Employee = () => {
               >
                 <Dialog.Panel className='w-[100vw] md:w-[60vw] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
                   <Dialog.Title as='h3' className='text-lg font-medium leading-6 text-gray-900'>
-                    Employee Detail
+                    User Detail
                   </Dialog.Title>
-                  <ViewEmployee />
+                  <ViewUser />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
