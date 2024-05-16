@@ -4,12 +4,11 @@ import { ProtectedRoute } from './ProtectedRouter.tsx'
 import { lazy, Suspense } from 'react'
 import Error from '~/components/shared/Error/Error.tsx'
 import AdminLayout from '~/layout/AdminLayout/index.tsx'
-import NavBar from '~/layout/AdminLayout/NavBar/index.tsx'
 import Loading from '~/components/shared/Loading/Loading.tsx'
 
 const Login = lazy(() => import('~/components/Login.tsx'))
 const Logout = lazy(() => import('~/components/Logout.tsx'))
-const Employee = lazy(() => import('~/pages/Admin/Employee.tsx'))
+const User = lazy(() => import('~/pages/Admin/User.tsx'))
 const Routes = () => {
   const { token } = useAuth()
   let routes: Array<any>
@@ -24,21 +23,12 @@ const Routes = () => {
           element: (
             <Suspense fallback={<Loading />}>
               <AdminLayout>
-                <NavBar />
+                <User />
               </AdminLayout>
             </Suspense>
           )
         },
-        {
-          path: '/employee',
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AdminLayout>
-                <Employee />
-              </AdminLayout>
-            </Suspense>
-          )
-        },
+
         {
           path: '/logout',
           element: (

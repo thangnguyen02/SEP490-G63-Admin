@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react'
 import AddNewUser from '~/components/Admin/Employee/AddNewUser'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import ViewUser from '~/components/Admin/Employee/ViewUser'
-const Employee = () => {
+const User = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [viewDetail, setViewDetail] = useState(false)
 
@@ -18,7 +18,7 @@ const Employee = () => {
     <div className='bg-[#e8eaed] h-full'>
       <div className='flex flex-wrap py-4'>
         <div className='font-bold hidden md:flex md:w-[20%] px-3 md:flex-col items-center '>
-          <p className='font-bold text-[28px]'>Employee</p>
+          <p className='font-bold text-[28px]'>User</p>
           <div className='overflow-x-auto shadow-md sm:rounded-md my-3 w-full'>
             <div className='bg-white pl-4'>
               <p>Permissions</p>
@@ -57,7 +57,7 @@ const Employee = () => {
               onClick={openModal}
               className='rounded-md flex gap-1 bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-[#00b63e] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
             >
-              <PlusIcon className='h-5 w-5' /> Add Employee
+              <PlusIcon className='h-5 w-5' /> Add User
             </button>
           </div>
           <div className=' overflow-x-auto shadow-md sm:rounded-lg my-3'>
@@ -65,7 +65,7 @@ const Employee = () => {
               <thead className=' text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
                 <tr>
                   <th scope='col' className='px-6 py-3'>
-                    Employee Name
+                    Company
                   </th>
                   <th scope='col' className='px-6 py-3'>
                     Email
@@ -74,13 +74,13 @@ const Employee = () => {
                     Phone
                   </th>
                   <th scope='col' className='px-6 py-3'>
-                    Department
-                  </th>
-                  <th scope='col' className='px-6 py-3'>
-                    Position
+                    Presenter
                   </th>
                   <th scope='col' className='px-6 py-3'>
                     Address
+                  </th>
+                  <th scope='col' className='px-6 py-3'>
+                    Status
                   </th>
 
                   <th scope='col' className='px-6 py-3'>
@@ -95,14 +95,13 @@ const Employee = () => {
                     className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:underline cursor-pointer'
                     onClick={() => setViewDetail(true)}
                   >
-                    Nguyễn Hữu Thắng
+                    TNHH CÔNG TY
                   </th>
                   <td className='px-6 py-4'>thangnhhe161517@fpt.edu.vn</td>
                   <td className='px-6 py-4'>0854898556</td>
-                  <td className='px-6 py-4'>IT</td>
-                  <td className='px-6 py-4'>Dev</td>
+                  <td className='px-6 py-4'>Nguyễn Hữu Thắng</td>
                   <td className='px-6 py-4'>Thon 3,Thach Hoa,Thach That,Ha Noi</td>
-
+                  <td className='px-6 py-4'>PROGRESS</td>
                   <td className='px-6 py-4 text-right'>
                     <a href='#' className='font-medium text-blue-600 dark:text-blue-500 hover:underline'>
                       Edit
@@ -190,4 +189,4 @@ const Employee = () => {
     </div>
   )
 }
-export default Employee
+export default User
