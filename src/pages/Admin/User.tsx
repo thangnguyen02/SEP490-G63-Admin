@@ -1,23 +1,49 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import AddNewUser from '~/components/Admin/Employee/AddNewUser'
-import { PlusIcon } from '@heroicons/react/24/outline'
-import ViewUser from '~/components/Admin/Employee/ViewUser'
+import DatePicker from 'react-datepicker'
+import ViewCustomer from '~/components/Admin/Employee/ViewCustomer'
+import {
+  EyeIcon,
+  NoSymbolIcon,
+  ArrowPathIcon,
+  ArrowUpOnSquareIcon,
+  EllipsisVerticalIcon
+} from '@heroicons/react/24/outline'
+import { dataCustomer } from '~/common/dataConfig'
+import { status } from '~/common/const/status'
+export type DataCustomer = {
+  id: string
+  customerName: string
+  startDate: string
+  endDate: string
+  registerDate: string
+  taxCode: string
+  status: 'PROGRESS' | 'WAIT' | 'EXPIRED' | 'CANCEL'
+  money: number
+}
 const User = () => {
-  const [isOpen, setIsOpen] = useState(false)
   const [viewDetail, setViewDetail] = useState(false)
+  const [startDate, setStartDate] = useState<Date | null>(new Date())
+  const [endDate, setEndDate] = useState<Date | null>(new Date())
+  const [data, setData] = useState<DataCustomer[]>([])
+  const [selectedCustomer, setSelectedCustomer] = useState<DataCustomer>()
+  const totalMoney = useMemo(() => {
+    return data.reduce((total: number, d: DataCustomer) => {
+      total += d.money
+      return total
+    }, 0)
+  }, [data])
+  console.log(totalMoney)
 
-  function closeModal() {
-    setIsOpen(false)
-  }
-
-  function openModal() {
-    setIsOpen(true)
-  }
+  useEffect(() => {
+    setData(dataCustomer)
+  }, [])
+  const handleOnSubmit = () => {}
   return (
     <div className='bg-[#e8eaed] h-full'>
       <div className='flex flex-wrap py-4'>
-        <div className='font-bold hidden md:flex md:w-[20%] px-3 md:flex-col items-center '>
+        {/* <div className='font-bold hidden md:flex md:w-[20%] px-3 md:flex-col items-center '>
           <p className='font-bold text-[28px]'>User</p>
           <div className='overflow-x-auto shadow-md sm:rounded-md my-3 w-full'>
             <div className='bg-white pl-4'>
@@ -25,88 +51,194 @@ const User = () => {
               <div className='font-normal'>select permission</div>
             </div>
           </div>
-        </div>
-        <div className=' w-full px-5  md:w-[80%]'>
-          <div className='flex gap-3 justify-between w-full'>
-            <div className='relative w-[50%]'>
-              <div className='absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none'>
-                <svg
-                  className='w-5 h-5 text-gray-500 dark:text-gray-400'
-                  aria-hidden='true'
-                  fill='currentColor'
-                  viewBox='0 0 20 20'
-                  xmlns='http://www.w3.org/2000/svg'
-                >
-                  <path
-                    fill-rule='evenodd'
-                    d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'
-                    clip-rule='evenodd'
-                  ></path>
-                </svg>
+        </div> */}
+        <div className=' w-full px-5  md:w-[100%]'>
+          <form onSubmit={handleOnSubmit}>
+            <div className='flex gap-3 justify-around w-full items-start'>
+              <div className='relative w-full'>
+                <div className='absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none'>
+                  <svg
+                    className='w-5 h-5 text-gray-500 dark:text-gray-400'
+                    aria-hidden='true'
+                    fill='currentColor'
+                    viewBox='0 0 20 20'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      fill-rule='evenodd'
+                      d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'
+                      clip-rule='evenodd'
+                    ></path>
+                  </svg>
+                </div>
+                <input
+                  type='text'
+                  id='table-search'
+                  className='block p-2 ps-10 w-full text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                  placeholder='Search for company'
+                />
               </div>
-              <input
-                type='text'
-                id='table-search'
-                className='block p-2 ps-10 w-full text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                placeholder='Search for employee'
-              />
-            </div>
+              <div className='relative w-[60%] h-full py-0 flex items-center gap-2'>
+                Từ ngày:
+                <DatePicker
+                  className='top-0 left-0 p-2  text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                />
+              </div>
 
-            <button
-              type='button'
-              onClick={openModal}
-              className='rounded-md flex gap-1 bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-[#00b63e] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
-            >
-              <PlusIcon className='h-5 w-5' /> Add User
-            </button>
-          </div>
-          <div className=' overflow-x-auto shadow-md sm:rounded-lg my-3'>
-            <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 overflow-auto '>
+              <div className='relative w-[60%] h-full py-0  flex items-center gap-2'>
+                Đến ngày:
+                <DatePicker
+                  className='top-0 right-0 p-2 text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                />
+              </div>
+              <button
+                type='submit'
+                className='rounded-md flex gap-1 bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-[#00b63e] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
+              >
+                Search
+              </button>
+            </div>
+          </form>
+          <div className='my-3 text-right px-6'>Đơn vị tính: VND</div>
+          <div className='overflow-x-auto  my-3 z-0 h-[76vh]'>
+            <table className='w-full text-sm text-left shadow-md sm:rounded-lg rtl:text-right text-gray-500 dark:text-gray-400 overflow-auto z-0'>
               <thead className=' text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
                 <tr>
-                  <th scope='col' className='px-6 py-3'>
-                    Company
+                  <th scope='col' className='px-2 py-3 text-center'>
+                    STT
                   </th>
-                  <th scope='col' className='px-6 py-3'>
-                    Email
+                  <th scope='col' className='px-2 py-3 text-center'>
+                    Tên khách hàng
                   </th>
-                  <th scope='col' className='px-6 py-3'>
-                    Phone
+                  <th scope='col' className='px-2 py-3 text-center'>
+                    Ngày bắt đầu
                   </th>
-                  <th scope='col' className='px-6 py-3'>
-                    Presenter
+                  <th scope='col' className='px-2 py-3 text-center'>
+                    Ngày kết thúc
                   </th>
-                  <th scope='col' className='px-6 py-3'>
-                    Address
+                  <th scope='col' className='px-2 py-3 text-center'>
+                    Ngày đăng ký
                   </th>
-                  <th scope='col' className='px-6 py-3'>
-                    Status
+                  <th scope='col' className='px-2 py-3 text-center'>
+                    Mã số thuế
                   </th>
-
-                  <th scope='col' className='px-6 py-3'>
-                    Action
+                  <th scope='col' className='px-2 py-3 text-center'>
+                    Trạng thái
                   </th>
+                  <th scope='col' className='px-2 py-3 text-center'>
+                    Thành tiền
+                  </th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody className='w-full'>
+                {data?.map((d: DataCustomer, index: number) => (
+                  <tr className=' w-full bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
+                    <td className='px-2 py-4 text-center'>{index + 1}</td>
+                    <td
+                      className='px-2 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white hover:underline cursor-pointer'
+                      onClick={() => {
+                        setViewDetail(true)
+                        setSelectedCustomer(d)
+                      }}
+                    >
+                      {d?.customerName}
+                    </td>
+                    <td className='px-2 py-4 text-center'>{d?.startDate}</td>
+                    <td className='px-2 py-4 text-center'>{d?.endDate}</td>
+                    <td className='px-2 py-4 text-center'>{d?.registerDate}</td>
+                    <td className='px-2 py-4 text-center'>{d?.taxCode}</td>
+                    <td className={`px-2 py-4 text-center ${status[d?.status]?.color}`}>{status[d?.status]?.title}</td>
+                    <td className='px-2 py-4 text-center'>{(d?.money + '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
+                    <td className='px-2 py-4 text-center'>
+                      <Menu as='div' className='relative inline-block text-left '>
+                        <Menu.Button>
+                          <button className='flex justify-center items-center gap-3 cursor-pointer hover:text-blue-500'>
+                            <EllipsisVerticalIcon className='h-7 w-7' title='Hành động' />
+                          </button>
+                        </Menu.Button>
+
+                        <Transition
+                          as={Fragment}
+                          enter='transition ease-out duration-100'
+                          enterFrom='transform opacity-0 scale-95'
+                          enterTo='transform opacity-100 scale-100'
+                          leave='transition ease-in duration-75'
+                          leaveFrom='transform opacity-100 scale-100'
+                          leaveTo='transform opacity-0 scale-95'
+                        >
+                          <Menu.Items className='absolute right-8 top-[-100%] z-50 mt-2 w-24 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none'>
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  title='Xem'
+                                  className={`${
+                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                  } group flex w-full items-center  gap-3 rounded-md px-2 py-2 text-sm `}
+                                >
+                                  <EyeIcon className='h-5' /> Xem
+                                </button>
+                              )}
+                            </Menu.Item>
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  title='Chặn'
+                                  className={`${
+                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                  } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
+                                >
+                                  <NoSymbolIcon className='h-5' /> Chặn
+                                </button>
+                              )}
+                            </Menu.Item>
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  title='Gia hạn'
+                                  className={`${
+                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                  } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
+                                >
+                                  <ArrowPathIcon className='h-5' /> Gia hạn
+                                </button>
+                              )}
+                            </Menu.Item>
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  title='Tải file'
+                                  className={`${
+                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                  } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
+                                >
+                                  <ArrowUpOnSquareIcon className='h-5' /> Tải file
+                                </button>
+                              )}
+                            </Menu.Item>
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
+                    </td>
+                  </tr>
+                ))}
+
                 <tr className=' w-full bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                  <th
-                    scope='row'
-                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:underline cursor-pointer'
-                    onClick={() => setViewDetail(true)}
-                  >
-                    TNHH CÔNG TY
-                  </th>
-                  <td className='px-6 py-4'>thangnhhe161517@fpt.edu.vn</td>
-                  <td className='px-6 py-4'>0854898556</td>
-                  <td className='px-6 py-4'>Nguyễn Hữu Thắng</td>
-                  <td className='px-6 py-4'>Thon 3,Thach Hoa,Thach That,Ha Noi</td>
-                  <td className='px-6 py-4'>PROGRESS</td>
-                  <td className='px-6 py-4 text-right'>
-                    <a href='#' className='font-medium text-blue-600 dark:text-blue-500 hover:underline'>
-                      Edit
-                    </a>
+                  <td className='px-2 py-4'></td>
+                  <td className='px-2 py-4'></td>
+                  <td className='px-2 py-4'></td>
+                  <td className='px-2 py-4'></td>
+                  <td className='px-2 py-4'></td>
+                  <td className='px-2 py-4'></td>
+                  <td className='px-2 py-4'></td>
+                  <td className='px-2 py-6 text-center text-black'>
+                    Tổng: {(totalMoney + '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   </td>
+                  <td className='px-2 py-4 '></td>
                 </tr>
               </tbody>
             </table>
@@ -114,42 +246,6 @@ const User = () => {
         </div>
       </div>
 
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as='div' className='relative z-10 w-[90vw]' onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter='ease-out duration-300'
-            enterFrom='opacity-0'
-            enterTo='opacity-100'
-            leave='ease-in duration-200'
-            leaveFrom='opacity-100'
-            leaveTo='opacity-0'
-          >
-            <div className='fixed inset-0 bg-black/25' />
-          </Transition.Child>
-
-          <div className='fixed inset-0 overflow-y-auto'>
-            <div className='flex min-h-full  items-center justify-center p-4 text-center'>
-              <Transition.Child
-                as={Fragment}
-                enter='ease-out duration-300'
-                enterFrom='opacity-0 scale-95'
-                enterTo='opacity-100 scale-100'
-                leave='ease-in duration-200'
-                leaveFrom='opacity-100 scale-100'
-                leaveTo='opacity-0 scale-95'
-              >
-                <Dialog.Panel className='w-[100vw] md:w-[60vw] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
-                  <Dialog.Title as='h3' className='text-lg font-medium leading-6 text-gray-900'>
-                    Add New User
-                  </Dialog.Title>
-                  <AddNewUser />
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
       <Transition appear show={viewDetail} as={Fragment}>
         <Dialog as='div' className='relative z-10 w-[90vw]' onClose={() => setViewDetail(false)}>
           <Transition.Child
@@ -175,11 +271,11 @@ const User = () => {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-[100vw] md:w-[60vw] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                <Dialog.Panel className='w-[100vw] md:w-[80vw]  transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
                   <Dialog.Title as='h3' className='text-lg font-medium leading-6 text-gray-900'>
-                    User Detail
+                    Customer Detail
                   </Dialog.Title>
-                  <ViewUser />
+                  {/* <ViewCustomer selectedCustomer={selectedCustomer} /> */}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

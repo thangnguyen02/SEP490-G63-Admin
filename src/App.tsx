@@ -3,8 +3,7 @@ import { store } from './redux/Store.tsx'
 import AuthProvider from './provider/authProvider.tsx'
 import Routes from './routers/index.tsx'
 import { GetTokenV2ContextProvider } from './context/GetTokenV2ContextProvider.tsx'
-import Form from './components/BaseComponent/Form/index.tsx'
-
+import 'react-datepicker/dist/react-datepicker.css'
 function App() {
   return (
     <Provider store={store}>
