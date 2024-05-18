@@ -1,21 +1,14 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import permissions from '~/common/const/permissions'
 import { REGEX_EMAIL } from '~/common/const/regexForm'
-type FromType = {
-  name: string
-  department: string
-  position: string
-  phone: string
-  email: string
-  password: string
-}
-const ViewUser = () => {
+import { DataCustomer } from '~/pages/Admin/User'
+const ViewCustomer = ({ selectedCustomer: DataCustomer }) => {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<FromType>()
-  const onSubmit: SubmitHandler<FromType> = (data) => {
+  } = useForm<DataCustomer>()
+  const onSubmit: SubmitHandler<DataCustomer> = (data) => {
     console.log(data)
   }
   return (
@@ -92,14 +85,6 @@ const ViewUser = () => {
         <label className='font-bold '>
           Permissions<sup className='text-red-500'>*</sup>
         </label>
-        <div className='flex flex-wrap justify-between'>
-          {permissions?.map((e) => (
-            <div className='flex w-[100%] md:w-[48%] gap-4 items-center' key={e.id}>
-              <input type='checkbox' className='rounded-sm' />
-              <label>{e.title}</label>
-            </div>
-          ))}
-        </div>
       </div>
       <div className='w-full flex justify-end'>
         <button
@@ -120,4 +105,4 @@ const ViewUser = () => {
     </form>
   )
 }
-export default ViewUser
+export default ViewCustomer

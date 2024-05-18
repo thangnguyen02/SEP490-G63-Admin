@@ -9,6 +9,7 @@ import Loading from '~/components/shared/Loading/Loading.tsx'
 const Login = lazy(() => import('~/components/Login.tsx'))
 const Logout = lazy(() => import('~/components/Logout.tsx'))
 const User = lazy(() => import('~/pages/Admin/User.tsx'))
+const Price = lazy(() => import('~/pages/Admin/Price.tsx'))
 const Routes = () => {
   const { token } = useAuth()
   let routes: Array<any>
@@ -28,7 +29,16 @@ const Routes = () => {
             </Suspense>
           )
         },
-
+        {
+          path: '/price',
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminLayout>
+                <Price />
+              </AdminLayout>
+            </Suspense>
+          )
+        },
         {
           path: '/logout',
           element: (
