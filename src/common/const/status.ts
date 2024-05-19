@@ -1,5 +1,5 @@
-export const status = {
-  PROGRESS: {
+export const statusRule = {
+  INUSE: {
     title: 'Đang sử dụng',
     color: 'text-black'
   },
@@ -7,11 +7,11 @@ export const status = {
     title: 'Hết hạn',
     color: 'text-amber-500'
   },
-  WAIT: {
+  PROCESSING: {
     title: 'Chờ kích hoạt',
     color: 'text-lime-500'
   },
-  CANCEL: {
+  LOCKED: {
     title: 'Bị khóa',
     color: 'text-red-500'
   }

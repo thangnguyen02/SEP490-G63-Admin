@@ -8,37 +8,76 @@ import {
   NoSymbolIcon,
   ArrowPathIcon,
   ArrowUpOnSquareIcon,
-  EllipsisVerticalIcon
+  EllipsisVerticalIcon,
+  LockOpenIcon
 } from '@heroicons/react/24/outline'
 import { dataCustomer } from '~/common/dataConfig'
-import { status } from '~/common/const/status'
+import { statusRule } from '~/common/const/status'
+import { approveCustomer, banCustomer, getCustomer } from '~/services/customer.service'
+import useToast from '~/hooks/useToast'
+import Expried from '~/components/Admin/Employee/Expried'
 export type DataCustomer = {
   id: string
-  customerName: string
-  startDate: string
-  endDate: string
+  companyName: string
+  startDateUseService: string
+  endDateUseService: string
   registerDate: string
   taxCode: string
-  status: 'PROGRESS' | 'WAIT' | 'EXPIRED' | 'CANCEL'
-  money: number
+  status: 'PROCESSING' | 'LOCKED' | 'EXPIRED' | 'INUSE'
+  price: number
 }
 const User = () => {
-  const [viewDetail, setViewDetail] = useState(false)
+  const [banModal, setBanModal] = useState(false)
+  const [extendModal, setExtendModal] = useState(false)
+  const [approveModal, setApproveModal] = useState(false)
   const [startDate, setStartDate] = useState<Date | null>(new Date())
   const [endDate, setEndDate] = useState<Date | null>(new Date())
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(5)
+  const [status, setStatus] = useState('')
   const [data, setData] = useState<DataCustomer[]>([])
-  const [selectedCustomer, setSelectedCustomer] = useState<DataCustomer>()
+  const [selectedCustomer, setSelectedCustomer] = useState<DataCustomer | null>(null)
+  const { successNotification, errorNotification } = useToast()
+  function closeModal() {
+    setBanModal(false)
+    setExtendModal(false)
+    setApproveModal(false)
+    setSelectedCustomer(null)
+  }
   const totalMoney = useMemo(() => {
     return data.reduce((total: number, d: DataCustomer) => {
-      total += d.money
+      total += d.price
       return total
     }, 0)
   }, [data])
-  console.log(totalMoney)
-
+  const handleBanCompany = async () => {
+    if (selectedCustomer?.id) {
+      const response = await banCustomer(selectedCustomer?.id)
+      if (response) {
+        successNotification('Hủy dịch vụ thành công')
+        closeModal()
+      }
+    }
+  }
+  const handleApproveCompany = async () => {
+    if (selectedCustomer?.id) {
+      const response = await approveCustomer(selectedCustomer?.id)
+      if (response) {
+        successNotification('Kích hoạt dịch vụ thành công')
+        closeModal()
+      }
+    }
+  }
   useEffect(() => {
-    setData(dataCustomer)
-  }, [])
+    const fetchAPI = async () => {
+      const data = await getCustomer({ status, page, size })
+      console.log(data)
+      if (data) {
+        setData(data.content)
+      }
+    }
+    fetchAPI()
+  }, [page, size, status, selectedCustomer])
   const handleOnSubmit = () => {}
   return (
     <div className='bg-[#e8eaed] h-full'>
@@ -104,7 +143,7 @@ const User = () => {
             </div>
           </form>
           <div className='my-3 text-right px-6'>Đơn vị tính: VND</div>
-          <div className='overflow-x-auto  my-3 z-0 h-[76vh]'>
+          <div className='overflow-x-auto  my-3 z-0 h-[70vh]'>
             <table className='w-full text-sm text-left shadow-md sm:rounded-lg rtl:text-right text-gray-500 dark:text-gray-400 overflow-auto z-0'>
               <thead className=' text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
                 <tr>
@@ -138,23 +177,19 @@ const User = () => {
               <tbody className='w-full'>
                 {data?.map((d: DataCustomer, index: number) => (
                   <tr className=' w-full bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                    <td className='px-2 py-4 text-center'>{index + 1}</td>
-                    <td
-                      className='px-2 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white hover:underline cursor-pointer'
-                      onClick={() => {
-                        setViewDetail(true)
-                        setSelectedCustomer(d)
-                      }}
-                    >
-                      {d?.customerName}
+                    <td className='px-2 py-2 text-center'>{index + 1}</td>
+                    <td className='px-2 py-2 text-center'>{d?.companyName}</td>
+                    <td className='px-2 py-2 text-center'>{d?.startDateUseService}</td>
+                    <td className='px-2 py-2 text-center'>{d?.endDateUseService}</td>
+                    <td className='px-2 py-2 text-center'>{d?.registerDate}</td>
+                    <td className='px-2 py-2 text-center'>{d?.taxCode}</td>
+                    <td className={`px-2 py-2 text-center ${statusRule[d?.status]?.color}`}>
+                      {statusRule[d?.status]?.title}
                     </td>
-                    <td className='px-2 py-4 text-center'>{d?.startDate}</td>
-                    <td className='px-2 py-4 text-center'>{d?.endDate}</td>
-                    <td className='px-2 py-4 text-center'>{d?.registerDate}</td>
-                    <td className='px-2 py-4 text-center'>{d?.taxCode}</td>
-                    <td className={`px-2 py-4 text-center ${status[d?.status]?.color}`}>{status[d?.status]?.title}</td>
-                    <td className='px-2 py-4 text-center'>{(d?.money + '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
-                    <td className='px-2 py-4 text-center'>
+                    <td className='px-2 py-2 text-center'>
+                      {d?.price == null ? 0 : (d?.price + '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    </td>
+                    <td className='px-2 py-2 text-center'>
                       <Menu as='div' className='relative inline-block text-left '>
                         <Menu.Button>
                           <button className='flex justify-center items-center gap-3 cursor-pointer hover:text-blue-500'>
@@ -171,55 +206,87 @@ const User = () => {
                           leaveFrom='transform opacity-100 scale-100'
                           leaveTo='transform opacity-0 scale-95'
                         >
-                          <Menu.Items className='absolute right-8 top-[-100%] z-50 mt-2 w-24 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none'>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  title='Xem'
-                                  className={`${
-                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
-                                  } group flex w-full items-center  gap-3 rounded-md px-2 py-2 text-sm `}
-                                >
-                                  <EyeIcon className='h-5' /> Xem
-                                </button>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  title='Chặn'
-                                  className={`${
-                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
-                                  } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
-                                >
-                                  <NoSymbolIcon className='h-5' /> Chặn
-                                </button>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  title='Gia hạn'
-                                  className={`${
-                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
-                                  } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
-                                >
-                                  <ArrowPathIcon className='h-5' /> Gia hạn
-                                </button>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  title='Tải file'
-                                  className={`${
-                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
-                                  } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
-                                >
-                                  <ArrowUpOnSquareIcon className='h-5' /> Tải file
-                                </button>
-                              )}
-                            </Menu.Item>
+                          <Menu.Items className='absolute right-8 top-[-100%] z-50 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none'>
+                            {d?.status == 'PROCESSING' ? (
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <button
+                                    title='Xác nhận'
+                                    onClick={() => {
+                                      setSelectedCustomer(d)
+                                      setApproveModal(true)
+                                    }}
+                                    className={`${
+                                      active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                    } group flex w-full items-center  gap-3 rounded-md px-2 py-2 text-sm `}
+                                  >
+                                    <LockOpenIcon className='h-5' /> Kích hoạt
+                                  </button>
+                                )}
+                              </Menu.Item>
+                            ) : (
+                              <>
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <button
+                                      title='Xem'
+                                      className={`${
+                                        active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                      } group flex w-full items-center  gap-3 rounded-md px-2 py-2 text-sm `}
+                                    >
+                                      <EyeIcon className='h-5' /> Xem
+                                    </button>
+                                  )}
+                                </Menu.Item>
+                                {d?.status != 'LOCKED' && d?.status != 'EXPIRED' && (
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <button
+                                        title='Chặn'
+                                        onClick={() => {
+                                          setSelectedCustomer(d)
+                                          setBanModal(true)
+                                        }}
+                                        className={`${
+                                          active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                        } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
+                                      >
+                                        <NoSymbolIcon className='h-5' /> Hủy
+                                      </button>
+                                    )}
+                                  </Menu.Item>
+                                )}
+
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <button
+                                      title='Gia hạn'
+                                      onClick={() => {
+                                        setSelectedCustomer(d)
+                                        setExtendModal(true)
+                                      }}
+                                      className={`${
+                                        active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                      } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
+                                    >
+                                      <ArrowPathIcon className='h-5' /> Gia hạn
+                                    </button>
+                                  )}
+                                </Menu.Item>
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <button
+                                      title='Tải file'
+                                      className={`${
+                                        active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                      } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
+                                    >
+                                      <ArrowUpOnSquareIcon className='h-5' /> Tải file
+                                    </button>
+                                  )}
+                                </Menu.Item>
+                              </>
+                            )}
                           </Menu.Items>
                         </Transition>
                       </Menu>
@@ -246,8 +313,8 @@ const User = () => {
         </div>
       </div>
 
-      <Transition appear show={viewDetail} as={Fragment}>
-        <Dialog as='div' className='relative z-10 w-[90vw]' onClose={() => setViewDetail(false)}>
+      <Transition appear show={banModal} as={Fragment}>
+        <Dialog as='div' className='relative z-10 w-[90vw]' onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter='ease-out duration-300'
@@ -271,11 +338,129 @@ const User = () => {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-[100vw] md:w-[80vw]  transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                <Dialog.Panel className='w-[100vw] md:w-[40vw]  transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
                   <Dialog.Title as='h3' className='text-lg font-medium leading-6 text-gray-900'>
-                    Customer Detail
+                    Hủy dịch vụ
                   </Dialog.Title>
-                  {/* <ViewCustomer selectedCustomer={selectedCustomer} /> */}
+                  <div>
+                    <div>
+                      Gói dịch vụ sẽ được hủy với công ty {selectedCustomer?.companyName}. Bạn có chắc chắn với quyết
+                      định của mình?
+                    </div>
+                    <div className='w-full flex justify-end mt-6'>
+                      <button
+                        type='button'
+                        className='middle  none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#ff00002f] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                        data-ripple-light='true'
+                        onClick={() => handleBanCompany()}
+                      >
+                        Chấp nhận
+                      </button>
+                      <button
+                        type='button'
+                        className='middle  none center mr-4 rounded-lg bg-[#49484d] py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#49484d]  focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                        data-ripple-light='true'
+                        onClick={closeModal}
+                      >
+                        Hủy
+                      </button>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      <Transition appear show={extendModal} as={Fragment}>
+        <Dialog as='div' className='relative z-10 w-[90vw]' onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter='ease-out duration-300'
+            enterFrom='opacity-0'
+            enterTo='opacity-100'
+            leave='ease-in duration-200'
+            leaveFrom='opacity-100'
+            leaveTo='opacity-0'
+          >
+            <div className='fixed inset-0 bg-black/25' />
+          </Transition.Child>
+
+          <div className='fixed inset-0 overflow-y-auto'>
+            <div className='flex min-h-full  items-center justify-center p-4 text-center'>
+              <Transition.Child
+                as={Fragment}
+                enter='ease-out duration-300'
+                enterFrom='opacity-0 scale-95'
+                enterTo='opacity-100 scale-100'
+                leave='ease-in duration-200'
+                leaveFrom='opacity-100 scale-100'
+                leaveTo='opacity-0 scale-95'
+              >
+                <Dialog.Panel className='w-[100vw] md:w-[40vw]  transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                  <Dialog.Title as='h3' className='text-lg font-medium leading-6 text-gray-900'>
+                    Hủy dịch vụ
+                  </Dialog.Title>
+                  <Expried closeModal={closeModal} selectedCustomer={selectedCustomer} />
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      <Transition appear show={approveModal} as={Fragment}>
+        <Dialog as='div' className='relative z-10 w-[90vw]' onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter='ease-out duration-300'
+            enterFrom='opacity-0'
+            enterTo='opacity-100'
+            leave='ease-in duration-200'
+            leaveFrom='opacity-100'
+            leaveTo='opacity-0'
+          >
+            <div className='fixed inset-0 bg-black/25' />
+          </Transition.Child>
+
+          <div className='fixed inset-0 overflow-y-auto'>
+            <div className='flex min-h-full  items-center justify-center p-4 text-center'>
+              <Transition.Child
+                as={Fragment}
+                enter='ease-out duration-300'
+                enterFrom='opacity-0 scale-95'
+                enterTo='opacity-100 scale-100'
+                leave='ease-in duration-200'
+                leaveFrom='opacity-100 scale-100'
+                leaveTo='opacity-0 scale-95'
+              >
+                <Dialog.Panel className='w-[100vw] md:w-[40vw]  transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                  <Dialog.Title as='h3' className='text-lg font-medium leading-6 text-gray-900'>
+                    Kích hoạt dịch vụ
+                  </Dialog.Title>
+                  <div>
+                    <div>
+                      Gói dịch vụ sẽ được kích hoạt với công ty {selectedCustomer?.companyName}. Bạn có chắc chắn với
+                      quyết định của mình?
+                    </div>
+                    <div className='w-full flex justify-end mt-6'>
+                      <button
+                        type='button'
+                        className='middle  none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#ff00002f] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                        data-ripple-light='true'
+                        onClick={() => handleApproveCompany()}
+                      >
+                        Chấp nhận
+                      </button>
+                      <button
+                        type='button'
+                        className='middle  none center mr-4 rounded-lg bg-[#49484d] py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#49484d]  focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                        data-ripple-light='true'
+                        onClick={closeModal}
+                      >
+                        Hủy
+                      </button>
+                    </div>
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
