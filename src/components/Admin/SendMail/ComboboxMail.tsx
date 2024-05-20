@@ -17,6 +17,10 @@ const handleNewField = (value: string): Option => ({
   value: value.toUpperCase().replace(/\s+/g, '_')
 })
 
+const customValueRenderer = (selected: any, _options: any) => {
+  return selected.length ? selected.map(({ label }: any) => label) : 'Tìm kiếm'
+}
+
 const ComboboxMail = () => {
   const [selected, setSelected] = useState<Option[]>([])
 
@@ -29,6 +33,7 @@ const ComboboxMail = () => {
         labelledBy='Tìm kiếm'
         isCreatable={true}
         onCreateOption={handleNewField}
+        valueRenderer={customValueRenderer}
       />
     </div>
   )
