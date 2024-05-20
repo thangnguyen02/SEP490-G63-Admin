@@ -16,6 +16,7 @@ import { statusRule } from '~/common/const/status'
 import { approveCustomer, banCustomer, getCustomer } from '~/services/customer.service'
 import useToast from '~/hooks/useToast'
 import Expried from '~/components/Admin/Employee/Expried'
+import moment from 'moment'
 export type DataCustomer = {
   id: string
   companyName: string
@@ -179,9 +180,17 @@ const User = () => {
                   <tr className=' w-full bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
                     <td className='px-2 py-2 text-center'>{index + 1}</td>
                     <td className='px-2 py-2 text-center'>{d?.companyName}</td>
-                    <td className='px-2 py-2 text-center'>{d?.startDateUseService}</td>
-                    <td className='px-2 py-2 text-center'>{d?.endDateUseService}</td>
-                    <td className='px-2 py-2 text-center'>{d?.registerDate}</td>
+                    <td className='px-2 py-2 text-center'>
+                      {d?.startDateUseService
+                        ? moment(d?.startDateUseService).format('DD-MM-YYYY')
+                        : d?.startDateUseService}
+                    </td>
+                    <td className='px-2 py-2 text-center'>
+                      {d?.endDateUseService ? moment(d?.endDateUseService).format('DD-MM-YYYY') : d?.endDateUseService}
+                    </td>
+                    <td className='px-2 py-2 text-center'>
+                      {d?.registerDate ? moment(d?.registerDate).format('DD-MM-YYYY') : d?.registerDate}
+                    </td>
                     <td className='px-2 py-2 text-center'>{d?.taxCode}</td>
                     <td className={`px-2 py-2 text-center ${statusRule[d?.status]?.color}`}>
                       {statusRule[d?.status]?.title}

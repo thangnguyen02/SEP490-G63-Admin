@@ -3,6 +3,7 @@ interface DataPrice {
   name: string
   description: string | null
   price: number
+  timeWithYears: number
 }
 interface DataUpdatePrice {
   id: string
@@ -24,9 +25,9 @@ export const updatePrice = async ({ id, body }: DataUpdatePrice) => {
     console.log(error)
   }
 }
-export const createPrice = async ({ name, description, price }: DataPrice) => {
+export const createPrice = async ({ name, description, price, timeWithYears }: DataPrice) => {
   try {
-    const response = await adminInstance.post('manager/pricePlan', { name, description, price })
+    const response = await adminInstance.post('manager/pricePlan', { name, description, price, timeWithYears })
     return response.data
   } catch (error) {
     console.log(error)
