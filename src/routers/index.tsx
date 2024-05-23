@@ -5,6 +5,7 @@ import { lazy, Suspense } from 'react'
 import Error from '~/components/shared/Error/Error.tsx'
 import AdminLayout from '~/layout/AdminLayout/index.tsx'
 import Loading from '~/components/shared/Loading/Loading.tsx'
+import SendMail from '~/pages/Admin/SendMail.tsx'
 
 const Login = lazy(() => import('~/components/Login.tsx'))
 const Logout = lazy(() => import('~/components/Logout.tsx'))
@@ -74,6 +75,14 @@ const Routes = () => {
       element: (
         <Suspense fallback={<Loading />}>
           <Login />
+        </Suspense>
+      )
+    },
+    {
+      path: '/send-mail',
+      element: (
+        <Suspense fallback={<Loading />}>
+          <SendMail />
         </Suspense>
       )
     },
