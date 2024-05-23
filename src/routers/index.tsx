@@ -51,6 +51,16 @@ const Routes = () => {
           )
         },
         {
+          path: '/send-mail',
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminLayout>
+                <SendMail />
+              </AdminLayout>
+            </Suspense>
+          )
+        },
+        {
           path: '/logout',
           element: (
             <Suspense fallback={<Loading />}>
@@ -78,14 +88,7 @@ const Routes = () => {
         </Suspense>
       )
     },
-    {
-      path: '/send-mail',
-      element: (
-        <Suspense fallback={<Loading />}>
-          <SendMail />
-        </Suspense>
-      )
-    },
+
     {
       path: '*',
       element: <Error />

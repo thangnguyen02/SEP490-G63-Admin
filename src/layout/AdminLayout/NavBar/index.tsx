@@ -81,7 +81,7 @@ const NavBar = () => {
               onClick={() => setOpenNav(true)}
             />
             <img src={logo} alt='logo' className='w-[32px]' />
-            <div className='bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-[24px]'>
+            <div  onClick={() => navigate("/")} className='bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-[24px] cursor-pointer'>
               Docman
             </div>
           </div>
