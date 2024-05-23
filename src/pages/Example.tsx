@@ -1,9 +1,9 @@
-import Form from '~/components/BaseComponent/Form'
+import UploadFile from '~/components/BaseComponent/Uploadfile/UploadFile'
 
 const Example = () => {
   return (
     <>
-      <Form></Form>
+      <UploadFile />
     </>
   )
 }

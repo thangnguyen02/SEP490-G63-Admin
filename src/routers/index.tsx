@@ -6,6 +6,9 @@ import Error from '~/components/shared/Error/Error.tsx'
 import AdminLayout from '~/layout/AdminLayout/index.tsx'
 import Loading from '~/components/shared/Loading/Loading.tsx'
 import SendMail from '~/pages/Admin/SendMail.tsx'
+import Example from '~/pages/Example.tsx'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const Login = lazy(() => import('~/components/Login.tsx'))
 const Logout = lazy(() => import('~/components/Logout.tsx'))
@@ -66,6 +69,18 @@ const Routes = () => {
             <Suspense fallback={<Loading />}>
               <AdminLayout>
                 <Logout />
+              </AdminLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: '/example',
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminLayout>
+                <DndProvider backend={HTML5Backend}>
+                  <Example />
+                </DndProvider>
               </AdminLayout>
             </Suspense>
           )
