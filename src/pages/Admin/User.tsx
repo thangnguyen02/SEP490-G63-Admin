@@ -16,6 +16,7 @@ import { statusRule } from '~/common/const/status'
 import { approveCustomer, banCustomer, getCustomer } from '~/services/customer.service'
 import useToast from '~/hooks/useToast'
 import Expried from '~/components/Admin/Employee/Expried'
+import moment from 'moment'
 export type DataCustomer = {
   id: string
   companyName: string
@@ -117,7 +118,7 @@ const User = () => {
                   placeholder='Search for company'
                 />
               </div>
-              <div className='relative w-[60%] h-full py-0 flex items-center gap-2'>
+              <div className=' w-[60%] h-full py-0 flex items-center gap-2'>
                 Từ ngày:
                 <DatePicker
                   className='top-0 left-0 p-2  text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
@@ -126,7 +127,7 @@ const User = () => {
                 />
               </div>
 
-              <div className='relative w-[60%] h-full py-0  flex items-center gap-2'>
+              <div className='w-[60%] h-full py-0  flex items-center gap-2 '>
                 Đến ngày:
                 <DatePicker
                   className='top-0 right-0 p-2 text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
@@ -136,7 +137,7 @@ const User = () => {
               </div>
               <button
                 type='submit'
-                className='rounded-md flex gap-1 bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-[#00b63e] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
+                className='rounded-md flex gap-1 bg-[#00b63e] px-4 py-2 text-sm font-medium text-white hover:bg-[#33854e] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
               >
                 Search
               </button>
@@ -179,9 +180,17 @@ const User = () => {
                   <tr className=' w-full bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
                     <td className='px-2 py-2 text-center'>{index + 1}</td>
                     <td className='px-2 py-2 text-center'>{d?.companyName}</td>
-                    <td className='px-2 py-2 text-center'>{d?.startDateUseService}</td>
-                    <td className='px-2 py-2 text-center'>{d?.endDateUseService}</td>
-                    <td className='px-2 py-2 text-center'>{d?.registerDate}</td>
+                    <td className='px-2 py-2 text-center'>
+                      {d?.startDateUseService
+                        ? moment(d?.startDateUseService).format('DD-MM-YYYY')
+                        : d?.startDateUseService}
+                    </td>
+                    <td className='px-2 py-2 text-center'>
+                      {d?.endDateUseService ? moment(d?.endDateUseService).format('DD-MM-YYYY') : d?.endDateUseService}
+                    </td>
+                    <td className='px-2 py-2 text-center'>
+                      {d?.registerDate ? moment(d?.registerDate).format('DD-MM-YYYY') : d?.registerDate}
+                    </td>
                     <td className='px-2 py-2 text-center'>{d?.taxCode}</td>
                     <td className={`px-2 py-2 text-center ${statusRule[d?.status]?.color}`}>
                       {statusRule[d?.status]?.title}

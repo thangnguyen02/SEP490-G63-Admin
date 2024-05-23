@@ -10,6 +10,7 @@ export type DataPrice = {
   name: string
   description: string | null
   price: number
+  timeWithYears: number
 }
 const Price = () => {
   const [data, setData] = useState<DataPrice[]>([])
@@ -88,6 +89,9 @@ const Price = () => {
                     STT
                   </th>
                   <th scope='col' className='px-2 py-3 text-center'>
+                    Tên
+                  </th>
+                  <th scope='col' className='px-2 py-3 text-center'>
                     Thời gian
                   </th>
                   <th scope='col' className='px-2 py-3 text-center'>
@@ -104,6 +108,7 @@ const Price = () => {
                   <tr className=' w-full bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
                     <td className='px-2 py-4 text-center'>{index + 1}</td>
                     <td className='px-2 py-4 text-center'>{d?.name}</td>
+                    <td className='px-2 py-4 text-center'>{d?.timeWithYears}</td>
                     <td className='px-2 py-4 text-center'>{d?.description}</td>
                     <td className='px-2 py-4 text-center'>{(d?.price + '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
                     <td className='px-2 py-4 text-center'>
@@ -268,6 +273,25 @@ const Price = () => {
                             className={`text-red-500 absolute text-[12px]  ${errors.name ? 'visible' : 'invisible'}`}
                           >
                             {errors.name?.message}
+                          </div>
+                        </div>
+                        <div className='w-full md:w-[48%] mt-5 relative'>
+                          <label className='font-bold '>
+                            Thời gian sử dụng<sup className='text-red-500'>*</sup>
+                          </label>
+                          <input
+                            type='number'
+                            min={1}
+                            className={`${errors.timeWithYears ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
+                            placeholder='Nhập thời gian sử dụng dịch vụ'
+                            {...register('timeWithYears', {
+                              required: 'Thời gian sử dụng được để trống'
+                            })}
+                          />
+                          <div
+                            className={`text-red-500 absolute text-[12px]  ${errors.timeWithYears ? 'visible' : 'invisible'}`}
+                          >
+                            {errors.timeWithYears?.message}
                           </div>
                         </div>
                         <div className='w-full md:w-[48%]  mt-5 relative'>
