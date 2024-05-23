@@ -9,7 +9,8 @@ import {
   ArrowPathIcon,
   ArrowUpOnSquareIcon,
   EllipsisVerticalIcon,
-  LockOpenIcon
+  LockOpenIcon,
+  PaperAirplaneIcon
 } from '@heroicons/react/24/outline'
 import { dataCustomer } from '~/common/dataConfig'
 import { statusRule } from '~/common/const/status'
@@ -226,7 +227,7 @@ const User = () => {
                                       setApproveModal(true)
                                     }}
                                     className={`${
-                                      active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                      active ? 'bg-green-500 text-white' : 'text-gray-900'
                                     } group flex w-full items-center  gap-3 rounded-md px-2 py-2 text-sm `}
                                   >
                                     <LockOpenIcon className='h-5' /> Kích hoạt
@@ -240,10 +241,26 @@ const User = () => {
                                     <button
                                       title='Xem'
                                       className={`${
-                                        active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                        active ? 'bg-green-500 text-white' : 'text-gray-900'
                                       } group flex w-full items-center  gap-3 rounded-md px-2 py-2 text-sm `}
                                     >
                                       <EyeIcon className='h-5' /> Xem
+                                    </button>
+                                  )}
+                                </Menu.Item>
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <button
+                                      title='Gia hạn'
+                                      onClick={() => {
+                                        setSelectedCustomer(d)
+                                        setExtendModal(true)
+                                      }}
+                                      className={`${
+                                        active ? 'bg-green-500 text-white' : 'text-gray-900'
+                                      } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
+                                    >
+                                      <PaperAirplaneIcon className='h-5' /> Gửi mail
                                     </button>
                                   )}
                                 </Menu.Item>
@@ -257,7 +274,7 @@ const User = () => {
                                           setBanModal(true)
                                         }}
                                         className={`${
-                                          active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                          active ? 'bg-green-500 text-white' : 'text-gray-900'
                                         } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
                                       >
                                         <NoSymbolIcon className='h-5' /> Hủy
@@ -275,19 +292,20 @@ const User = () => {
                                         setExtendModal(true)
                                       }}
                                       className={`${
-                                        active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                        active ? 'bg-green-500 text-white' : 'text-gray-900'
                                       } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
                                     >
                                       <ArrowPathIcon className='h-5' /> Gia hạn
                                     </button>
                                   )}
                                 </Menu.Item>
+
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
                                       title='Tải file'
                                       className={`${
-                                        active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                                        active ? 'bg-green-500 text-white' : 'text-gray-900'
                                       } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}
                                     >
                                       <ArrowUpOnSquareIcon className='h-5' /> Tải file
