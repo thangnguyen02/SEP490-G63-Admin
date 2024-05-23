@@ -30,6 +30,16 @@ const Routes = () => {
           )
         },
         {
+          path: '/customer',
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminLayout>
+                <User />
+              </AdminLayout>
+            </Suspense>
+          )
+        },
+        {
           path: '/price',
           element: (
             <Suspense fallback={<Loading />}>

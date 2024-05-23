@@ -118,7 +118,7 @@ const User = () => {
                   placeholder='Search for company'
                 />
               </div>
-              <div className='relative w-[60%] h-full py-0 flex items-center gap-2'>
+              <div className=' w-[60%] h-full py-0 flex items-center gap-2'>
                 Từ ngày:
                 <DatePicker
                   className='top-0 left-0 p-2  text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
@@ -127,7 +127,7 @@ const User = () => {
                 />
               </div>
 
-              <div className='relative w-[60%] h-full py-0  flex items-center gap-2'>
+              <div className='w-[60%] h-full py-0  flex items-center gap-2 '>
                 Đến ngày:
                 <DatePicker
                   className='top-0 right-0 p-2 text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
@@ -137,7 +137,7 @@ const User = () => {
               </div>
               <button
                 type='submit'
-                className='rounded-md flex gap-1 bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-[#00b63e] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
+                className='rounded-md flex gap-1 bg-[#00b63e] px-4 py-2 text-sm font-medium text-white hover:bg-[#33854e] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
               >
                 Search
               </button>
