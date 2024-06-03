@@ -92,7 +92,7 @@ const Price = () => {
                     Tên
                   </th>
                   <th scope='col' className='px-2 py-3 text-center'>
-                    Thời gian
+                    Thời gian(năm)
                   </th>
                   <th scope='col' className='px-2 py-3 text-center'>
                     Mô tả
