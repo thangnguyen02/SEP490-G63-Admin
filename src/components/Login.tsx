@@ -26,9 +26,9 @@ const Login = () => {
       const response = await login(data)
       if (response) {
         setToken(response?.access_token)
-        successNotification('Đăng nhập thành công nhé')
+        successNotification('Đăng nhập thành công')
         navigate('/')
-      } else errorNotification('Đăng nhập không thành công nhé')
+      } else errorNotification('Đăng nhập thất bại')
     } catch (error) {
       console.log(error)
     }
@@ -42,11 +42,11 @@ const Login = () => {
         className='flex-col items-center w-[90%] md:w-[30%] rounded-lg border flex flex-wrap px-4 h-fit bg-white z-50 py-4'
         autoComplete='on'
       >
-        <div className='font-bold flex items-end justify-center w-[50%] my-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-[150%]'>
+        <div className='font-bold flex items-end justify-center w-[50%] my-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-900 text-[150%]'>
           <img src={logo} alt='logo' className='w-[20%]' />
           Docman
         </div>
-        <div>Admin site</div>
+        <div>Admin system</div>
         <div className='w-full mt-5 relative'>
           <label className='font-bold '>
             Email<sup className='text-red-500'>*</sup>

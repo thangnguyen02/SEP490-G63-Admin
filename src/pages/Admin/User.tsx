@@ -18,6 +18,7 @@ import { approveCustomer, banCustomer, getCustomer } from '~/services/customer.s
 import useToast from '~/hooks/useToast'
 import Expried from '~/components/Admin/Employee/Expried'
 import moment from 'moment'
+import Loading from '~/components/shared/Loading/Loading'
 export type DataCustomer = {
   id: string
   companyName: string
@@ -32,8 +33,8 @@ const User = () => {
   const [banModal, setBanModal] = useState(false)
   const [extendModal, setExtendModal] = useState(false)
   const [approveModal, setApproveModal] = useState(false)
-  const [startDate, setStartDate] = useState<Date | null>(new Date())
-  const [endDate, setEndDate] = useState<Date | null>(new Date())
+  const [startDate, setStartDate] = useState<Date | null>()
+  const [endDate, setEndDate] = useState<Date | null>()
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(5)
   const [status, setStatus] = useState('')
@@ -73,30 +74,23 @@ const User = () => {
   useEffect(() => {
     const fetchAPI = async () => {
       const data = await getCustomer({ status, page, size })
-      console.log(data)
       if (data) {
         setData(data.content)
       }
     }
     fetchAPI()
   }, [page, size, status, selectedCustomer])
-  const handleOnSubmit = () => {}
+  const handleOnSubmit = (e: any) => {
+    e.preventDefault()
+  }
+  if (!data) return <Loading />
   return (
     <div className='bg-[#e8eaed] h-full'>
       <div className='flex flex-wrap py-4'>
-        {/* <div className='font-bold hidden md:flex md:w-[20%] px-3 md:flex-col items-center '>
-          <p className='font-bold text-[28px]'>User</p>
-          <div className='overflow-x-auto shadow-md sm:rounded-md my-3 w-full'>
-            <div className='bg-white pl-4'>
-              <p>Permissions</p>
-              <div className='font-normal'>select permission</div>
-            </div>
-          </div>
-        </div> */}
         <div className=' w-full px-5  md:w-[100%]'>
-          <form onSubmit={handleOnSubmit}>
-            <div className='flex gap-3 justify-around w-full items-start'>
-              <div className='relative w-full'>
+          <form onSubmit={handleOnSubmit} className='mt-4'>
+            <div className='flex gap-3 justify-around w-full items-start flex-wrap md:flex-nowrap'>
+              <div className='relative w-full '>
                 <div className='absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none'>
                   <svg
                     className='w-5 h-5 text-gray-500 dark:text-gray-400'
@@ -115,36 +109,36 @@ const User = () => {
                 <input
                   type='text'
                   id='table-search'
-                  className='block p-2 ps-10 w-full text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                  placeholder='Search for company'
+                  className='block p-2 ps-10 w-full text-xs text-gray-900 border border-gray-300 rounded-md  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                  placeholder='Tìm kiếm tên công ty'
                 />
               </div>
-              <div className=' w-[60%] h-full py-0 flex items-center gap-2'>
-                Từ ngày:
+              <div className='w-[40%] h-full '>
                 <DatePicker
-                  className='top-0 left-0 p-2  text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                  className='text-xs text-gray-900 border border-gray-300 rounded-md  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                   selected={startDate}
+                  placeholderText='Ngày bắt đầu'
                   onChange={(date) => setStartDate(date)}
                 />
               </div>
 
-              <div className='w-[60%] h-full py-0  flex items-center gap-2 '>
-                Đến ngày:
+              <div className='w-[40%] h-full'>
                 <DatePicker
-                  className='top-0 right-0 p-2 text-sm text-gray-900 border border-gray-300 rounded-lg  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                  className='text-xs text-gray-900 border border-gray-300 rounded-md  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                   selected={endDate}
+                  minDate={startDate}
+                  placeholderText='Ngày kết thúc'
                   onChange={(date) => setEndDate(date)}
                 />
               </div>
               <button
                 type='submit'
-                className='rounded-md flex gap-1 bg-[#00b63e] px-4 py-2 text-sm font-medium text-white hover:bg-[#33854e] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
+                className='rounded-md flex gap-1 bg-main-color px-4 py-2 text-sm font-medium text-white hover:bg-hover-main focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
               >
-                Search
+                Tìm
               </button>
             </div>
           </form>
-          <div className='my-3 text-right px-6'>Đơn vị tính: VND</div>
           <div className='overflow-x-auto  my-3 z-0 h-[70vh]'>
             <table className='w-full text-sm text-left shadow-md sm:rounded-lg rtl:text-right text-gray-500 dark:text-gray-400 overflow-auto z-0'>
               <thead className=' text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
@@ -171,7 +165,7 @@ const User = () => {
                     Trạng thái
                   </th>
                   <th scope='col' className='px-2 py-3 text-center'>
-                    Thành tiền
+                    Thành tiền(VND)
                   </th>
                   <th></th>
                 </tr>
@@ -252,10 +246,6 @@ const User = () => {
                                   {({ active }) => (
                                     <button
                                       title='Gia hạn'
-                                      onClick={() => {
-                                        setSelectedCustomer(d)
-                                        setExtendModal(true)
-                                      }}
                                       className={`${
                                         active ? 'bg-green-500 text-white' : 'text-gray-900'
                                       } group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm `}

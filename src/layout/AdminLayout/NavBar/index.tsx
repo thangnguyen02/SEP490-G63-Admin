@@ -47,13 +47,13 @@ const NavBar = () => {
             <label className='font-bold cursor-pointer flex items-center gap-1'>0854898556</label>
           </div>
           <button
-            className={`hover:bg-green-500 hover:text-white text-gray-900
+            className={`hover:bg-blue-500 hover:text-white text-gray-900
            group flex w-full items-center  px-2 py-2 text-sm `}
           >
             Account
           </button>
           <button
-            className={`hover:bg-green-500 hover:text-white text-gray-900
+            className={`hover:bg-blue-500 hover:text-white text-gray-900
            group flex w-full items-center  px-2 py-2 text-sm `}
           >
             Logout
@@ -67,7 +67,7 @@ const NavBar = () => {
               <li
                 key={r.id}
                 onClick={() => navigate(r.slug)}
-                className={`${r.slug == location.pathname ? 'bg-green-500 text-white' : ''} cursor-pointer  hover:bg-green-500 hover:text-white w-full px-2 py-3 flex items-center gap-2 text-[14px]`}
+                className={`${r.slug == location.pathname ? 'bg-blue-500 text-white' : ''} cursor-pointer  hover:bg-blue-500 hover:text-white w-full px-2 py-3 flex items-center gap-2 text-[14px]`}
               >
                 {r.icon} {r.title}
               </li>
@@ -81,7 +81,10 @@ const NavBar = () => {
               onClick={() => setOpenNav(true)}
             />
             <img src={logo} alt='logo' className='w-[32px]' />
-            <div  onClick={() => navigate("/")} className='bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-[24px] cursor-pointer'>
+            <div
+              onClick={() => navigate('/')}
+              className='bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-900 text-[24px] cursor-pointer'
+            >
               Docman
             </div>
           </div>
@@ -124,7 +127,7 @@ const NavBar = () => {
                   leaveFrom='transform opacity-100 scale-100'
                   leaveTo='transform opacity-0 scale-95'
                 >
-                  <Menu.Items className='absolute right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-9999'>
+                  <Menu.Items className='absolute right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-79'>
                     <Menu.Item>
                       {({ active }) => (
                         <button
@@ -160,12 +163,12 @@ const NavBar = () => {
         </div>
       </div>
       {!isMobile && (
-        <ul className={`flex h-[40px] bg-[#00b63e] gap-1 px-10 text-white font-bold`}>
+        <ul className={`flex h-[40px] bg-main-color gap-1 px-10 text-white font-bold`}>
           {routerAdmin.map((r) => (
             <li
               key={r.id}
               onClick={() => navigate(r.slug)}
-              className={`${r.slug == location.pathname ? 'bg-[#33854e]' : ''} cursor-pointer rounded-md hover:bg-[#33854e] px-2 flex items-center gap-2 justify-center text-[12px]`}
+              className={`${r.slug == location.pathname ? 'bg-hover-main' : ''} cursor-pointer rounded-md hover:bg-hover-main px-2 flex items-center gap-2 justify-center text-[12px]`}
             >
               {r.icon} {r.title}
             </li>

@@ -7,6 +7,10 @@ export default {
       backgroundImage: {
         'login-img': "url('/src/assets/images/login-2.jpg')",
         'footer-texture': "url('/img/footer-texture.png')"
+      },
+      backgroundColor: {
+        'main-color': '#0070f4',
+        'hover-main': '#005ac3'
       }
     }
   },
