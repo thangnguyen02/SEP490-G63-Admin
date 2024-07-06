@@ -1,12 +1,16 @@
+import { AxiosError } from 'axios'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useMutation } from 'react-query'
+import LoadingIcon from '~/assets/LoadingIcon'
 import useToast from '~/hooks/useToast'
 import { DataPrice } from '~/pages/Admin/Price'
 import { updatePrice } from '~/services/price.service'
-interface Iprops {
+interface IProps {
   closeModalUpdate: () => void
   selectedPrice: DataPrice | null
+  refetch: any
 }
-const UpdatePrice = ({ closeModalUpdate, selectedPrice }: Iprops) => {
+const UpdatePrice = ({ closeModalUpdate, selectedPrice, refetch }: IProps) => {
   const { errorNotification, successNotification } = useToast()
   const {
     register,
@@ -14,18 +18,20 @@ const UpdatePrice = ({ closeModalUpdate, selectedPrice }: Iprops) => {
     reset,
     formState: { errors }
   } = useForm<DataPrice>({ defaultValues: selectedPrice ? selectedPrice : undefined })
+  const updateQuery = useMutation(updatePrice, {
+    onSuccess: () => {
+      successNotification('Thay đổi gói thành công')
+      closeModalUpdate()
+      refetch()
+      reset()
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
+    }
+  })
   const onSubmit: SubmitHandler<DataPrice> = async (data) => {
-    try {
-      if (selectedPrice?.id) {
-        const response = await updatePrice({ id: selectedPrice?.id, body: data })
-        if (response) {
-          successNotification('Thay đổi gói thành công')
-          closeModalUpdate()
-          reset()
-        } else errorNotification('Thay đổi gói không thành công')
-      }
-    } catch (error) {
-      console.log(error)
+    if (selectedPrice?.id) {
+      updateQuery.mutate({ id: selectedPrice?.id, body: data })
     }
   }
   return (
@@ -69,6 +75,7 @@ const UpdatePrice = ({ closeModalUpdate, selectedPrice }: Iprops) => {
         <input
           className={`${errors.price ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
           type='number'
+          min={0}
           placeholder='Nhập giá dịch vụ'
           {...register('price', {
             required: 'Giá không được để trống'
@@ -76,6 +83,22 @@ const UpdatePrice = ({ closeModalUpdate, selectedPrice }: Iprops) => {
         />
         <div className={`text-red-500 absolute text-[12px] ${errors.price ? 'visible' : 'invisible'}`}>
           {errors.price?.message}
+        </div>
+      </div>
+      <div className='w-full md:w-[48%]  mt-5 relative'>
+        <label className='font-bold '>
+          Chiết khấu(%)<sup className='text-red-500'>*</sup>
+        </label>
+        <input
+          className={`${errors.discount ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
+          type='number'
+          placeholder='Nhập chiết khấu dịch vụ'
+          {...register('discount', {
+            required: 'Chiết khấu không được để trống'
+          })}
+        />
+        <div className={`text-red-500 absolute text-[12px] ${errors.discount ? 'visible' : 'invisible'}`}>
+          {errors.discount?.message}
         </div>
       </div>
       <div className='w-full   mt-5 relative'>
@@ -98,7 +121,7 @@ const UpdatePrice = ({ closeModalUpdate, selectedPrice }: Iprops) => {
           className='middle  none center mr-4 rounded-lg bg-[#0070f4] py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#0072f491] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
           data-ripple-light='true'
         >
-          Sửa
+          {updateQuery.isLoading ? <LoadingIcon /> : 'Sửa'}
         </button>
         <button
           type='button'

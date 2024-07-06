@@ -1,16 +1,13 @@
 import { Provider } from 'react-redux'
 import { store } from './redux/Store.tsx'
-import AuthProvider from './provider/authProvider.tsx'
+import AuthProvider from './context/authProvider.tsx'
 import Routes from './routers/index.tsx'
-import { GetTokenV2ContextProvider } from './context/GetTokenV2ContextProvider.tsx'
 import 'react-datepicker/dist/react-datepicker.css'
 function App() {
   return (
     <Provider store={store}>
       <AuthProvider>
-        <GetTokenV2ContextProvider>
-          <Routes />
-        </GetTokenV2ContextProvider>
+        <Routes />
       </AuthProvider>
     </Provider>
   )

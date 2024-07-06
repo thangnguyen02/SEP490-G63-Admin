@@ -1,14 +1,14 @@
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { useAuth } from '../provider/authProvider'
+import { useAuth } from '../context/authProvider.tsx'
 import { ProtectedRoute } from './ProtectedRouter.tsx'
 import { lazy, Suspense } from 'react'
 import Error from '~/components/shared/Error/Error.tsx'
 import AdminLayout from '~/layout/AdminLayout/index.tsx'
-import Loading from '~/components/shared/Loading/Loading.tsx'
 import SendMail from '~/pages/Admin/SendMail.tsx'
 import Example from '~/pages/Example.tsx'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import LoadingPage from '~/components/shared/LoadingPage/LoadingPage.tsx'
 
 const Login = lazy(() => import('~/components/Login.tsx'))
 const Logout = lazy(() => import('~/components/Logout.tsx'))
@@ -26,7 +26,7 @@ const Routes = () => {
         {
           path: '/',
           element: (
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<LoadingPage />}>
               <AdminLayout>
                 <User />
               </AdminLayout>
@@ -36,7 +36,7 @@ const Routes = () => {
         {
           path: '/customer',
           element: (
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<LoadingPage />}>
               <AdminLayout>
                 <User />
               </AdminLayout>
@@ -46,7 +46,7 @@ const Routes = () => {
         {
           path: '/price',
           element: (
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<LoadingPage />}>
               <AdminLayout>
                 <Price />
               </AdminLayout>
@@ -56,7 +56,7 @@ const Routes = () => {
         {
           path: '/send-mail',
           element: (
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<LoadingPage />}>
               <AdminLayout>
                 <SendMail />
               </AdminLayout>
@@ -66,7 +66,7 @@ const Routes = () => {
         {
           path: '/logout',
           element: (
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<LoadingPage />}>
               <AdminLayout>
                 <Logout />
               </AdminLayout>
@@ -76,7 +76,7 @@ const Routes = () => {
         {
           path: '/example',
           element: (
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<LoadingPage />}>
               <AdminLayout>
                 <DndProvider backend={HTML5Backend}>
                   <Example />
@@ -98,7 +98,7 @@ const Routes = () => {
     {
       path: '/',
       element: (
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<LoadingPage />}>
           <Login />
         </Suspense>
       )

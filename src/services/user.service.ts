@@ -1,3 +1,4 @@
+import { NotificationData } from '~/context/notiProvider.tsx'
 import axiosInstant, { adminInstance } from '../config/axiosConfig.ts'
 interface LoginData {
   email: string
@@ -26,4 +27,8 @@ export const register = async ({ company, taxCode, firstName, lastName, email, p
   } catch (error) {
     console.log(error)
   }
+}
+export const getNotification = async (): Promise<NotificationData[]> => {
+  const response = await axiosInstant.get('notification')
+  return response?.data?.content
 }
