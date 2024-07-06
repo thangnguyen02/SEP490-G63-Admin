@@ -42,10 +42,10 @@ const SendMail = () => {
             console.log('Focus.', editor)
           }}
         />
-        <div className="mt-4 text-center">
-          <input type="file" id="file-upload" className="hidden" />
-          <label htmlFor="file-upload" className="cursor-pointer inline-flex items-center justify-center rounded-full">
-            <img src={uploadIcon} alt="Upload" className="w-30 h-20" />
+        <div className='mt-4 text-center'>
+          <input type='file' id='file-upload' className='hidden' />
+          <label htmlFor='file-upload' className='cursor-pointer inline-flex items-center justify-center rounded-full'>
+            <img src={uploadIcon} alt='Upload' className='w-30 h-20' />
           </label>
         </div>
         {/* <button className='p-2 rounded-full bg-teal-500 text-white mt-4 text-center flex justify-center mx-auto'>

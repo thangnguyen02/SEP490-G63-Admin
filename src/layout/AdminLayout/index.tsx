@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom'
-import { useAuth } from '~/provider/authProvider'
+import { useAuth } from '~/context/authProvider'
 import NavBar from './NavBar'
 
 function AdminLayout({ children }: any) {
