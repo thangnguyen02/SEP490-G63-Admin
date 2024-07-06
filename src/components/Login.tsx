@@ -6,14 +6,14 @@ import { getAccessToken, setAccessToken } from '~/config/accessToken'
 import useToast from '~/hooks/useToast'
 import logo from '../assets/svg/Tdocman.svg'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '~/provider/authProvider'
+import { useAuth } from '~/context/authProvider'
 type FromType = {
   email: string
   password: string
 }
 const Login = () => {
   const navigate = useNavigate()
-  const { setToken } = useAuth()
+  const { setToken, setUser } = useAuth()
   const {
     register,
     handleSubmit,
@@ -26,6 +26,12 @@ const Login = () => {
       const response = await login(data)
       if (response) {
         setToken(response?.access_token)
+        setUser({
+          id: response.user?.id,
+          name: response.user?.name,
+          role: response.user?.role,
+          email: response.user?.email
+        })
         successNotification('Đăng nhập thành công')
         navigate('/')
       } else errorNotification('Đăng nhập thất bại')
