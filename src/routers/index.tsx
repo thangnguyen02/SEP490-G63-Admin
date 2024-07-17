@@ -9,6 +9,8 @@ import Example from '~/pages/Example.tsx'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import LoadingPage from '~/components/shared/LoadingPage/LoadingPage.tsx'
+import Register from '~/components/Register.tsx'
+import Home from '~/pages/landing_page/Home.tsx'
 
 const Login = lazy(() => import('~/components/Login.tsx'))
 const Logout = lazy(() => import('~/components/Logout.tsx'))
@@ -97,6 +99,23 @@ const Routes = () => {
   const routesForNotAuthenticatedOnly = [
     {
       path: '/',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <Home />
+        </Suspense>
+      )
+    },
+
+    {
+      path: '/register',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <Register />
+        </Suspense>
+      )
+    },
+    {
+      path: '/login',
       element: (
         <Suspense fallback={<LoadingPage />}>
           <Login />

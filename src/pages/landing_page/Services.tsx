@@ -53,7 +53,7 @@ const Services = () => {
             {ServicesData.map((service) => (
               <div
                 data-aos='zoom-in'
-                className='rounded-2xl bg-white dark:bg-gray-800 hover:bg-primary dark:hover:bg-primary hover:text-white relative shadow-xl duration-high group max-w-[300px]'
+                className='rounded-2xl bg-white dark:bg-gray-800 hover:bg-primary dark:hover:bg-primary hover:text-black relative shadow-xl duration-high group max-w-[300px]'
               >
                 <div className='h-[160px]'>
                   <img
@@ -72,13 +72,13 @@ const Services = () => {
                   </div>
                   <h1 className='text-xl font-bold'>{service.title}</h1>
                   <div className='text-start'>
-                    <p className='text-gray-500 group-hover:text-white duration-high text-sm line-clamp-6'>
+                    <p className='text-gray-500 group-hover:text-black duration-high text-sm line-clamp-6'>
                       {service.description1}
                     </p>
-                    <p className='text-gray-500 group-hover:text-white duration-high text-sm line-clamp-6'>
+                    <p className='text-gray-500 group-hover:text-black duration-high text-sm line-clamp-6'>
                       {service.description2}
                     </p>
-                    <p className='text-gray-500 group-hover:text-white duration-high text-sm line-clamp-6'>
+                    <p className='text-gray-500 group-hover:text-black duration-high text-sm line-clamp-6'>
                       {service.description3}
                     </p>
                   </div>
