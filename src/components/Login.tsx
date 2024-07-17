@@ -7,6 +7,9 @@ import useToast from '~/hooks/useToast'
 import logo from '../assets/svg/Tdocman.svg'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '~/context/authProvider'
+import { useMutation } from 'react-query'
+import { AxiosError } from 'axios'
+import LoadingIcon from '~/assets/LoadingIcon'
 type FromType = {
   email: string
   password: string
@@ -20,10 +23,11 @@ const Login = () => {
     formState: { errors }
   } = useForm<FromType>()
   const { successNotification, errorNotification } = useToast()
-
-  const onSubmit: SubmitHandler<FromType> = async (data) => {
-    try {
-      const response = await login(data)
+  const loginQuery = useMutation(login, {
+    onError: (error: AxiosError<{ message: string }>) => {
+      errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
+    },
+    onSuccess: (response) => {
       if (response) {
         setToken(response?.access_token)
         setUser({
@@ -35,9 +39,27 @@ const Login = () => {
         successNotification('Đăng nhập thành công')
         navigate('/')
       } else errorNotification('Đăng nhập thất bại')
-    } catch (error) {
-      console.log(error)
     }
+  })
+
+  const onSubmit: SubmitHandler<FromType> = async (data) => {
+    loginQuery.mutate(data)
+    // try {
+    //   const response = await login(data)
+    //   if (response) {
+    //     setToken(response?.access_token)
+    //     setUser({
+    //       id: response.user?.id,
+    //       name: response.user?.name,
+    //       role: response.user?.role,
+    //       email: response.user?.email
+    //     })
+    //     successNotification('Đăng nhập thành công')
+    //     navigate('/')
+    //   } else errorNotification('Đăng nhập thất bại')
+    // } catch (error) {
+    //   console.log(error)
+    // }
   }
 
   return (
@@ -58,6 +80,7 @@ const Login = () => {
             Email<sup className='text-red-500'>*</sup>
           </label>
           <input
+            disabled={loginQuery.isLoading}
             className={`${errors.email ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
             placeholder='Enter your email'
             {...register('email', {
@@ -77,6 +100,7 @@ const Login = () => {
             Password<sup className='text-red-500'>*</sup>
           </label>
           <input
+            disabled={loginQuery.isLoading}
             className={`${errors.password ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
             type='password'
             placeholder='Enter your password'
@@ -94,7 +118,7 @@ const Login = () => {
           className='middle my-3 none center mr-4 rounded-lg bg-[#0070f4] py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#0072f491] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
           data-ripple-light='true'
         >
-          Login
+          {loginQuery.isLoading ? <LoadingIcon /> : 'Đăng nhập'}
         </button>
       </form>
     </div>
