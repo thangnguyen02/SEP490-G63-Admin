@@ -5,10 +5,12 @@ import { registerUser } from '~/services/user.service'
 import useToast from '~/hooks/useToast'
 import logo from '../assets/svg/Tdocman.svg'
 import { useNavigate } from 'react-router-dom'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { getPrice } from '~/services/admin.contract.service'
 import { useState } from 'react'
 import LoadingPage from './shared/LoadingPage/LoadingPage'
+import { AxiosError } from 'axios'
+import LoadingIcon from '~/assets/LoadingIcon'
 type FromType = {
   company: string
   taxCode: string
@@ -27,20 +29,32 @@ const Register = () => {
     handleSubmit,
     formState: { errors }
   } = useForm<FromType>()
-  // const { successNotification, errorNotification } = useToast()
 
-  const onSubmit: SubmitHandler<FromType> = async (data) => {
-    try {
-      setLoading(true)
-      const response = await registerUser(data)
+  const registerQuery = useMutation(registerUser, {
+    onSuccess: (response) => {
       if (response) {
         successNotification('Đăng ký sử dụng dịch vụ Tdocman thành công')
+        navigate('/admin/dashboard')
       } else errorNotification('Đăng ký thất bại')
-    } catch (error) {
-      errorNotification('Lỗi hệ thống')
-    } finally {
-      setLoading(false)
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
     }
+  })
+
+  const onSubmit: SubmitHandler<FromType> = async (data) => {
+    registerQuery.mutate(data)
+    // try {
+    //   setLoading(true)
+    //   const response = await registerUser(data)
+    //   if (response) {
+    //     successNotification('Đăng ký sử dụng dịch vụ Tdocman thành công')
+    //   } else errorNotification('Đăng ký thất bại')
+    // } catch (error) {
+    //   errorNotification('Lỗi hệ thống')
+    // } finally {
+    //   setLoading(false)
+    // }
   }
   const { data: dataPrice, isLoading } = useQuery('data-price', getPrice, {
     onSuccess: (d) => {
@@ -50,7 +64,7 @@ const Register = () => {
   const handleChangeOption = (e: any) => {
     setSelectedPrice(dataPrice?.find((d: any) => d.id == e.target.value))
   }
-  if (isLoading || loading) return <LoadingPage />
+  if (isLoading) return <LoadingPage />
   return (
     <div className='flex justify-center relative h-[100vh]  items-center bg-login-img bg-cover'>
       <div className='absolute inset-0 bg-black opacity-70 z-40'></div>
@@ -69,6 +83,7 @@ const Register = () => {
               Tên công ty<sup className='text-red-500'>*</sup>
             </label>
             <input
+              disabled={registerQuery.isLoading}
               className={`${errors.company ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
               placeholder='Công ty CP...'
               {...register('company', {
@@ -84,6 +99,7 @@ const Register = () => {
               Mã số thuế<sup className='text-red-500'>*</sup>
             </label>
             <input
+              disabled={registerQuery.isLoading}
               className={`${errors.taxCode ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
               type='text'
               placeholder='Nhập mã số thuế'
@@ -104,6 +120,7 @@ const Register = () => {
               Người đại diện<sup className='text-red-500'>*</sup>
             </label>
             <input
+              disabled={registerQuery.isLoading}
               className={`${errors.presenter ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
               type='text'
               placeholder='Tên người đại diện'
@@ -124,6 +141,7 @@ const Register = () => {
               Email<sup className='text-red-500'>*</sup>
             </label>
             <input
+              disabled={registerQuery.isLoading}
               className={`${errors.email ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
               type='text'
               placeholder='email@gmail.com'
@@ -144,6 +162,7 @@ const Register = () => {
               Số điện thoại<sup className='text-red-500'>*</sup>
             </label>
             <input
+              disabled={registerQuery.isLoading}
               className={`${errors.phone ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
               type='text'
               placeholder='Nhập số điện thoại'
@@ -164,6 +183,7 @@ const Register = () => {
               Loại dịch vụ<sup className='text-red-500'>*</sup>
             </label>
             <select
+              disabled={registerQuery.isLoading}
               className={`${errors.planpriceId ? 'ring-red-600' : ''} block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
               {...register('planpriceId', {
                 required: 'Loại dịch vụ không được để trống'
@@ -202,7 +222,7 @@ const Register = () => {
           className='middle my-3 none center mr-4 rounded-lg bg-[#0070f4] py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#0072f491] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
           data-ripple-light='true'
         >
-          Đăng ký
+          {registerQuery.isLoading ? <LoadingIcon /> : 'Đăng ký'}
         </button>
         <div>
           Bạn đã có tài khoản?
