@@ -28,3 +28,6 @@ input:focus {
   background: #aaa;
   border-radius: 10px;
 }
+.react-datepicker-wrapper {
+  width: 100%;
+}

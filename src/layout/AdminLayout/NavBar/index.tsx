@@ -34,14 +34,14 @@ const NavBar = () => {
     <div>
       <div className='relative visible'>
         <div
-          className={`absolute z-20 h-[100vh] overflow-hidden bg-black w-full opacity-40 transition-all duration-100 delay-100 ease-in ${openNav || openProfile ? 'visible' : 'invisible'}`}
+          className={`absolute z-10 h-[100vh] overflow-hidden bg-black w-full opacity-40 transition-all duration-100 delay-100 ease-in ${openNav || openProfile ? 'visible' : 'invisible'}`}
           onClick={() => {
             openNav && setOpenNav(false)
             openProfile && setOpenProfile(false)
           }}
         ></div>
         <div
-          className={`absolute z-30 h-[100vh] overflow-hidden bg-white w-[200px] right-0 transition-all duration-100 delay-100 ease-in ${openProfile ? 'visible' : 'invisible'}`}
+          className={`absolute z-50 h-[100vh] overflow-hidden bg-white w-[200px] right-0 transition-all duration-100 delay-100 ease-in ${openProfile ? 'visible' : 'invisible'}`}
         >
           <div className='flex flex-col justify-center items-center gap-3 cursor-pointer'>
             <img
@@ -82,7 +82,7 @@ const NavBar = () => {
           </button>
         </div>
         <div
-          className={`absolute z-30 h-[100vh] overflow-hidden bg-white w-[220px] left-0 transition-all duration-100 delay-100 ease-in ${openNav ? 'visible' : 'invisible'}`}
+          className={`absolute z-50 h-[100vh] overflow-hidden bg-white w-[220px] left-0 transition-all duration-100 delay-100 ease-in ${openNav ? 'visible' : 'invisible'}`}
         >
           <ul className={`flex flex-col gap-1 font-bold`}>
             {routerAdmin.map((r) => (
