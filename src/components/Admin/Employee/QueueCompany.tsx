@@ -20,6 +20,7 @@ import {
   extendService,
   getAllQueueExtend,
   getCustomer,
+  rejectExtend,
   uploadFileCompany
 } from '~/services/customer.service'
 import useToast from '~/hooks/useToast'
@@ -30,6 +31,7 @@ import { useMutation, useQuery } from 'react-query'
 import Pagination from '~/components/BaseComponent/Pagination/Pagination'
 import Loading from '~/components/shared/Loading/Loading'
 import { Controller, useForm } from 'react-hook-form'
+import LoadingIcon from '~/assets/LoadingIcon'
 
 const statusList = [
   {
@@ -129,7 +131,7 @@ const QueueCompany = () => {
       refetch()
     }
   })
-  const rejectExtendQuery = useMutation(approveExtend, {
+  const rejectExtendQuery = useMutation(rejectExtend, {
     onError: (error: AxiosError<{ message: string }>) => {
       errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
     },
@@ -145,7 +147,9 @@ const QueueCompany = () => {
       pricePlanId: selectedCustomer?.pricePlanId
     })
   }
-
+  const handleRejectCompany = async () => {
+    rejectExtendQuery.mutate(selectedCustomer?.id as string)
+  }
   const onSubmit = async (data: any) => {
     refetch()
   }
@@ -402,11 +406,12 @@ const QueueCompany = () => {
                     <div className='w-full flex justify-end mt-6'>
                       <button
                         type='button'
+                        disabled={rejectExtendQuery?.isLoading}
                         className='middle  none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#ff00002f] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
                         data-ripple-light='true'
                         onClick={() => handleRejectCompany()}
                       >
-                        Chấp nhận
+                        {rejectExtendQuery?.isLoading ? <LoadingIcon /> : 'Chấp nhận'}
                       </button>
                       <button
                         type='button'

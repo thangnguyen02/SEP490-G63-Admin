@@ -44,6 +44,10 @@ export const extendService = async (data: any) => {
   const response = await adminInstance.post(`manager/queueExtend/public`, data)
   return response.data
 }
+export const rejectExtend = async (id:string) => {
+  const response = await adminInstance.post(`manager/queueExtend/${id}`)
+  return response.data
+}
 export const updateCustomer = async ({ id, body }: DataUpdateCustomer) => {
   try {
     const response = await adminInstance.put(`manager/company/${id}`, body)
