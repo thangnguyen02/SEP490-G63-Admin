@@ -29,12 +29,12 @@ const Login = () => {
     },
     onSuccess: (response) => {
       if (response) {
-        setToken(response?.access_token)
+        setToken(response?.object?.access_token)
         setUser({
-          id: response.user?.id,
-          name: response.user?.name,
-          role: response.user?.role,
-          email: response.user?.email
+          id: response?.object?.user?.id,
+          name: response?.object?.user?.name,
+          role: response?.object?.user?.role,
+          email: response?.object?.user?.email
         })
         successNotification('Đăng nhập thành công')
         navigate('/')

@@ -1,5 +1,8 @@
+import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useMutation } from 'react-query'
+import LoadingIcon from '~/assets/LoadingIcon'
 import useToast from '~/hooks/useToast'
 import { DataPrice } from '~/pages/Admin/Price'
 
@@ -22,18 +25,18 @@ const Expried = ({ closeModal, selectedCustomer }: Iprops) => {
     handleSubmit,
     formState: { errors }
   } = useForm<FormData>()
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    try {
-      if (selectedCustomer?.id) {
-        const response = await extendService(selectedCustomer?.id, data.pricePlan)
-        if (response) {
-          successNotification('Gia hạn dịch vụ thành công')
-          closeModal()
-        } else errorNotification('Gia hạn dịch vụ không thành công')
-      }
-    } catch (error) {
-      console.log(error)
+
+  const extendServiceQuery = useMutation(extendService, {
+    onError: (error: AxiosError<{ message: string }>) => {
+      errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
+    },
+    onSuccess: () => {
+      successNotification('Gia hạn dịch vụ thành công')
+      closeModal()
     }
+  })
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    extendServiceQuery.mutate({ companyId: selectedCustomer?.id, pricePlanId: data.pricePlan })
   }
 
   useEffect(() => {
@@ -59,13 +62,15 @@ const Expried = ({ closeModal, selectedCustomer }: Iprops) => {
       <div className='w-full flex justify-end mt-6'>
         <button
           type='submit'
+          disabled={extendServiceQuery?.isLoading}
           className='middle  none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#ff00002f] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
           data-ripple-light='true'
         >
-          Chấp nhận
+          {extendServiceQuery?.isLoading ? <LoadingIcon /> : 'Chấp nhận'}
         </button>
         <button
           type='button'
+          disabled={extendServiceQuery?.isLoading}
           className='middle  none center mr-4 rounded-lg bg-[#49484d] py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#49484d]  focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
           data-ripple-light='true'
           onClick={closeModal}

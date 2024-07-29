@@ -34,7 +34,6 @@ const Register = () => {
     onSuccess: (response) => {
       if (response) {
         successNotification('Đăng ký sử dụng dịch vụ Tdocman thành công')
-        navigate('/admin/dashboard')
       } else errorNotification('Đăng ký thất bại')
     },
     onError: (error: AxiosError<{ message: string }>) => {
