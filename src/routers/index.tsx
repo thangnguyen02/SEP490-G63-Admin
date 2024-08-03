@@ -11,6 +11,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import LoadingPage from '~/components/shared/LoadingPage/LoadingPage.tsx'
 import Register from '~/components/Register.tsx'
 import Home from '~/pages/landing_page/Home.tsx'
+import Blogs from '~/pages/landing_page/Blogs.tsx'
 
 const Login = lazy(() => import('~/components/Login.tsx'))
 const Logout = lazy(() => import('~/components/Logout.tsx'))
@@ -119,6 +120,14 @@ const Routes = () => {
       element: (
         <Suspense fallback={<LoadingPage />}>
           <Login />
+        </Suspense>
+      )
+    },
+    {
+      path: '/blog',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <Blogs />
         </Suspense>
       )
     },

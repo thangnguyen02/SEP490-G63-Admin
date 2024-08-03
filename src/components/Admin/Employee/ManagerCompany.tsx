@@ -238,7 +238,7 @@ const ManagerCompany = () => {
           </div>
           <button
             type='submit'
-            className='rounded-md flex gap-1 bg-main-color px-4 py-2 text-sm font-medium text-white hover:bg-hover-main focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
+            className='rounded-md flex gap-1 bg-main-color px-4 py-[0.4rem] text-sm font-medium text-white hover:bg-hover-main focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'
           >
             Tìm
           </button>

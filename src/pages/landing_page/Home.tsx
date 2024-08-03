@@ -2,7 +2,6 @@ import React from 'react'
 import Hero from '~/components/landing_page/Hero/Hero'
 import Welcome from '~/assets/places/Kinh-doanh-la-gi-cho-vi-du.jpg'
 import Places from '~/components/landing_page/Places/Places'
-// import Testimonial from "~/components/landing_page/Testimonial/Testimonial";
 import Banner from '~/components/landing_page/Banner/Banner'
 import Contact from '~/components/landing_page/BannerPic/BannerPic'
 import AOS from 'aos'
@@ -10,9 +9,7 @@ import 'aos/dist/aos.css'
 import Navbar from '../../components/landing_page/Navbar/Navbar'
 import Footer from '../../components/landing_page/Footer/Footer'
 import Services from './Services'
-import ServicesBoxx from './ServiceBoxx'
 import Banner1 from '~/components/landing_page/Banner/Banner1'
-import Banner2 from '~/components/landing_page/Banner/Banner2'
 
 const Home = () => {
   React.useEffect(() => {
@@ -26,7 +23,7 @@ const Home = () => {
   }, [])
 
   return (
-    <>
+    <div className='overflow-x-hidden'>
       <Navbar />
       <div>
         <div className='h-[700px] relative'>
@@ -37,15 +34,11 @@ const Home = () => {
         <Places />
         <Services />
         <Contact />
-        {/* <BlogsComp /> */}
         <Banner />
         <Banner1 />
-        {/* <Banner2 /> */}
-        {/* <ServicesBoxx /> */}
-        {/* <Testimonial /> */}
       </div>
       <Footer />
-    </>
+    </div>
   )
 }
 
