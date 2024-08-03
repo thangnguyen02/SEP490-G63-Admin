@@ -17,7 +17,7 @@ const User = () => {
             {menuCompany?.map((m) => (
               <div
                 key={m.value}
-                className={`${tab == m.value ? 'bg-main-color hover:bg-hover-main text-white' : 'text-black bg-white'} cursor-pointer shadow-md px-2 rounded-lg`}
+                className={`${tab == m.value ? 'bg-main-color hover:bg-hover-main text-white' : 'text-black bg-white'} cursor-pointer shadow-md px-2 py-1 rounded-lg`}
                 onClick={() => setTab(m.value as 'ManagerCompany' | 'QueueContract')}
               >
                 {m.title}
