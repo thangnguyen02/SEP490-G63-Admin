@@ -190,7 +190,7 @@ const NavBar = () => {
               <div
                 className='flex justify-center items-center gap-3 cursor-pointer'
                 title='Trang cá nhân'
-                onClick={() => navigate('/profile')}
+                // onClick={() => navigate('/profile')}
               >
                 <img
                   src={avatar}
