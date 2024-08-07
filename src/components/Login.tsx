@@ -25,7 +25,7 @@ const Login = () => {
   const { successNotification, errorNotification } = useToast()
   const loginQuery = useMutation(login, {
     onError: (error: AxiosError<{ message: string }>) => {
-      errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
+      errorNotification(error.response?.data?.message || 'Lỗi hệ thống!')
     },
     onSuccess: (response) => {
       if (response) {
@@ -120,6 +120,12 @@ const Login = () => {
         >
           {loginQuery.isLoading ? <LoadingIcon /> : 'Đăng nhập'}
         </button>
+        <div>
+          Chưa có tài khoản?
+          <span className='cursor-pointer text-blue-600 ' onClick={() => navigate('/register')}>
+            Đăng ký ngay
+          </span>
+        </div>
       </form>
     </div>
   )
