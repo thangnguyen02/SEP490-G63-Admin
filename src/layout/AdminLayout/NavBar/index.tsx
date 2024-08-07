@@ -1,6 +1,12 @@
 import { Fragment, useState } from 'react'
 import logo from '../../../assets/svg/Tdocman.svg'
-import { Bars3Icon, UserIcon, ArrowRightStartOnRectangleIcon, BellAlertIcon } from '@heroicons/react/24/outline'
+import {
+  Bars3Icon,
+  UserIcon,
+  ArrowRightStartOnRectangleIcon,
+  BellAlertIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline'
 import avatar from '../../../assets/images/avatar1.png'
 import useViewport from '~/hooks/useViewport'
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +15,10 @@ import useToast from '~/hooks/useToast'
 import { routerAdmin } from '~/common/const/router'
 import { Popover, Transition } from '@headlessui/react'
 import { NotificationData, useNotification } from '~/context/notiProvider'
+import moment from 'moment'
+import LogoNoti from '~/assets/books/logo-noti.png'
+import { permissionObject } from '~/common/const/permissions'
+import LoadingIcon from '~/assets/LoadingIcon'
 const NavBar = () => {
   const [openNav, setOpenNav] = useState(false)
   const [openProfile, setOpenProfile] = useState(false)
@@ -17,19 +27,68 @@ const NavBar = () => {
   const navigate = useNavigate()
   const { removeToken, user } = useAuth()
   const { successNotification } = useToast()
-  // const { notifications, totalNotRead, isReadNotify, setNotifications, setTotalNotRead } = useNotification()
+  const [activeButton, setActiveButton] = useState('all')
+
+  const {
+    notifications,
+    totalNotRead,
+    isReadNotify,
+    isDeleteNotify,
+    viewMoreNotify,
+    setNotifications,
+    setTotalNotRead,
+    loading,
+    page,
+    totalPages
+  } = useNotification()
+
   const handleReadNotify = (id: any, markRead: boolean) => {
-    // if (!markRead) {
-    //   setTotalNotRead((totalNotRead: any) => totalNotRead - 1)
-    //   setNotifications(
-    //     notifications.map((n) => {
-    //       if (n.id == id) return { ...n, markRead: true }
-    //       else return n
-    //     })
-    //   )
-    //   isReadNotify(id)
-    // }
+    if (!markRead) {
+      setTotalNotRead((totalNotRead: any) => totalNotRead - 1)
+      setNotifications(
+        notifications?.map((n) => {
+          if (n.id == id) return { ...n, markRead: true }
+          else return n
+        })
+      )
+      isReadNotify(id)
+    }
   }
+  const handleDeleteNotify = (id: any) => {
+    setNotifications((prevNotifications: any) => prevNotifications.filter((n: any) => n.id !== id))
+
+    isDeleteNotify(id)
+  }
+
+  const formatTime = (time: string) => {
+    moment.updateLocale('vi', {
+      relativeTime: {
+        future: 'trong %s',
+        past: '%s trước',
+        s: 'vài giây',
+        ss: '%d giây',
+        m: 'một phút',
+        mm: '%d phút',
+        h: 'một giờ',
+        hh: '%d giờ',
+        d: 'một ngày',
+        dd: '%d ngày',
+        M: 'một tháng',
+        MM: '%d tháng',
+        y: 'một năm',
+        yy: '%d năm'
+      }
+    })
+
+    return moment(time).fromNow()
+  }
+  const handleButtonClick = (type: 'all' | 'unread') => {
+    setActiveButton(type)
+  }
+
+  const filteredNotifications =
+    activeButton === 'all' ? notifications : notifications.filter((n: NotificationData) => !n.markRead)
+
   return (
     <div>
       <div className='relative visible'>
@@ -126,15 +185,15 @@ const NavBar = () => {
                 <Popover.Button
                   className={`
                 ${open ? 'text-white' : 'text-white/90'}
-                group inline-flex items-center rounded-mdpx-3 py-2 text-base font-medium hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75`}
+                group inline-flex items-center rounded-md px-3 py-2 text-base font-medium hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75`}
                 >
                   <div className='relative'>
                     <BellAlertIcon className='w-7 h-7 cursor-pointer text-blue-700' />
-                    {/* {totalNotRead != 0 && (
+                    {totalNotRead != 0 && !loading && (
                       <div className='text-white cursor-default absolute top-[-4px] right-[-4px] bg-red-500 text-[8px] rounded-[50%] w-4 h-4 flex justify-center items-center font-bold'>
                         {totalNotRead}
                       </div>
-                    )} */}
+                    )}
                   </div>
                 </Popover.Button>
                 <Transition
@@ -147,31 +206,90 @@ const NavBar = () => {
                   leaveTo='opacity-0 translate-y-1'
                 >
                   <Popover.Panel
-                    className={`absolute left-1/2 z-10  w-64  ${isMobile ? '-translate-x-[100%]' : 'md:-translate-x-[100%] md:w-96'} transform px-4 sm:px-0 `}
+                    className={`absolute left-1/2 z-10  w-96  ${isMobile ? '-translate-x-[80%] ' : 'md:-translate-x-[100%] md:w-90'} transform px-4 sm:px-0 `}
                   >
-                    <div className='overflow-hidden rounded-lg w-full shadow-lg ring-1 ring-black/5'>
-                      <div className='relative gap-8 w-full bg-white flex p-1  overflow-auto justify-center'>
-                        {/* {notifications?.length == 0 ? (
-                          <div className='min-h-[100px] flex items-center'>Không có thông báo </div>
+                    <div className='overflow-hidden rounded-lg bg-white w-full shadow-lg ring-1 ring-black/5 sm: ml-[15px]'>
+                      <div className='font-bold text-[20px] pl-4 my-2'>Thông báo</div>
+                      <button
+                        className={`px-4 py-2 rounded-3xl ml-3 text-blue-600 font-semibold ${activeButton === 'all' ? 'bg-blue-100' : ''}`}
+                        onClick={() => handleButtonClick('all')}
+                      >
+                        Tất cả
+                      </button>
+                      <button
+                        className={`ml-1 px-4 py-2 rounded-3xl text-blue-600 font-semibold ${activeButton === 'unread' ? 'bg-blue-100' : ''}`}
+                        onClick={() => handleButtonClick('unread')}
+                      >
+                        Chưa đọc
+                      </button>
+                      <div className='relative w-full max-h-[60vh] overflow-auto'>
+                        {loading && notifications?.length == 0 ? (
+                          <div className='min-h-[200px] flex items-center justify-center'>
+                            <LoadingIcon className='w-6 h-6' />
+                          </div>
+                        ) : notifications?.length == 0 || !notifications ? (
+                          <div className='min-h-[200px] flex items-center justify-center'>Không có thông báo </div>
                         ) : (
                           <div className='flex flex-col justify-center overflow-y-auto overflow-x-hidden px-1 w-full '>
-                            {notifications.map((n: NotificationData) => (
+                            {filteredNotifications?.map((n: NotificationData) => (
                               <div
                                 key={n.id}
-                                onClick={() => handleReadNotify(n.id, n.markRead)}
-                                className={`bg-white rounded-md m-[1px] cursor-pointer hover:bg-gray-200 px-3 py-1 w-full flex items-center relative`}
+                                className={`bg-white m-[1px] cursor-pointer w-full flex items-center group relative hover:bg-gray-200 rounded-md`}
                               >
-                                <div className=' flex flex-col'>
-                                  <div className='font-bold text-[16px]'>{n.title}</div>
+                                <img
+                                  src={LogoNoti}
+                                  alt='avatar'
+                                  style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    objectFit: 'cover',
+                                    borderRadius: '50%',
+                                    border: '1px solid ghostwhite',
+                                    marginRight: '10px',
+                                    marginLeft: '5px'
+                                  }}
+                                  title={n.sender}
+                                />
+                                <div
+                                  className={`flex flex-col w-[80%] pr-8 py-1 rounded-md transition-colors delay-[200] ${
+                                    n.markRead ? 'opacity-60' : ''
+                                  }`}
+                                  onClick={() => handleReadNotify(n.id, n.markRead)}
+                                >
+                                  <div className='font-semibold text-[16px]'>{n.title}</div>
                                   <div className='text-[12px]'>{n.message}</div>
+                                  <div
+                                    className={`text-[12px] font-semibold ${
+                                      n.markRead ? 'opacity-60' : 'text-blue-600'
+                                    }`}
+                                  >
+                                    {formatTime(n.createdDate)}
+                                  </div>
                                 </div>
-                                {!n.markRead && (
-                                  <div className='w-3 h-3 rounded-[50%] absolute right-10 bg-blue-600'></div>
-                                )}
+                                {!n.markRead && <div className='w-3 h-3 rounded-[50%] bg-blue-600 mr-2'></div>}
+                                <div
+                                  className='w-5 h-5 rounded-[50%] absolute right-8 z-50 cursor-pointer border hover:text-white hover:bg-red-800 group-hover:visible invisible'
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleDeleteNotify(n.id)
+                                  }}
+                                >
+                                  <XMarkIcon />
+                                </div>
                               </div>
                             ))}
+                            {page.current + 1 != totalPages.current && (
+                              <div
+                                className='flex justify-center text-blue-400 hover:underline border-t-2 cursor-pointer p-2'
+                                onClick={() => {
+                                  viewMoreNotify()
+                                }}
+                              >
+                                Xem thêm
+                              </div>
+                            )}
                           </div>
-                        )} */}
+                        )}
                       </div>
                     </div>
                   </Popover.Panel>
