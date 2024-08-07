@@ -25,7 +25,7 @@ const Login = () => {
   const { successNotification, errorNotification } = useToast()
   const loginQuery = useMutation(login, {
     onError: (error: AxiosError<{ message: string }>) => {
-      errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
+      errorNotification(error.response?.data?.message || 'Lỗi hệ thống!')
     },
     onSuccess: (response) => {
       if (response) {
