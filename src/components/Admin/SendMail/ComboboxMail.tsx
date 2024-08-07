@@ -1,42 +1,77 @@
-import React, { useState } from 'react'
-import { MultiSelect } from 'react-multi-select-component'
+import AsyncCreatableSelect from 'react-select/async-creatable'
+import useToast from '~/hooks/useToast'
+// import { validateEmail } from '~/common/utils/checkMail'
 
-type Option = {
-  label: string
-  value: string
-}
+const AsyncCreatableSelectComponent = ({ selected, setSelected, option, isDisabled = false }: any) => {
+  const { errorNotification } = useToast()
 
-const options: Option[] = [
-  { label: 'Junggie@gmail.com', value: 'grapes' },
-  { label: 'Yujinnie@gmail.com', value: 'mango' },
-  { label: 'Minjeong@gmail.com', value: 'strawberry' }
-]
+  const filterColors = (inputValue: string) => {
+    return option?.filter((i: any) => i.label.toLowerCase().includes(inputValue.toLowerCase()))
+  }
 
-const handleNewField = (value: string): Option => ({
-  label: value,
-  value: value.toUpperCase().replace(/\s+/g, '_')
-})
+  const promiseOptions = (inputValue: string) =>
+    new Promise<any[]>((resolve) => {
+      setTimeout(() => {
+        resolve(filterColors(inputValue))
+      }, 300)
+    })
+  const createOption = async (inputValue: string) => {
+    // const isValidEmail = await validateEmail(inputValue)
 
-const customValueRenderer = (selected: any, _options: any) => {
-  return selected.length ? selected.map(({ label }: any) => label) : 'Tìm kiếm'
-}
+    // if (isValidEmail) {
+    return {
+      label: inputValue,
+      value: inputValue.toLowerCase().replace(/\s+/g, '_')
+    }
+    // } else {
+    //   errorNotification('Email không tồn tại hoặc không hợp lệ!')
+    //   return null
+    // }
+  }
+  const handleCreate = async (inputValue: string) => {
+    const newOption = await createOption(inputValue)
+    if (newOption) {
+      setSelected((prevOptions: any) => [...prevOptions, newOption])
+    }
+  }
 
-const ComboboxMail = () => {
-  const [selected, setSelected] = useState<Option[]>([])
+  const customStyles = {
+    control: (provided: any) => ({
+      ...provided,
+      border: '1px solid transparent',
+      boxShadow: 'none',
+      '&:hover': {
+        border: '1px solid transparent'
+      }
+    }),
+    input: (provided: any) => ({
+      ...provided,
+      boxShadow: 'none',
+      '& input': {
+        boxShadow: 'none !important',
+        border: 'none !important',
+        '&:focus': {
+          boxShadow: 'none !important',
+          border: 'none !important'
+        }
+      }
+    })
+  }
 
   return (
     <div className='w-full'>
-      <MultiSelect
-        options={options}
+      <AsyncCreatableSelect
+        cacheOptions
+        loadOptions={promiseOptions}
+        defaultOptions={option}
+        isMulti
         value={selected}
         onChange={setSelected}
-        labelledBy='Tìm kiếm'
-        isCreatable={true}
-        onCreateOption={handleNewField}
-        valueRenderer={customValueRenderer}
+        styles={customStyles}
+        isDisabled={isDisabled}
       />
     </div>
   )
 }
 
-export default ComboboxMail
+export default AsyncCreatableSelectComponent
