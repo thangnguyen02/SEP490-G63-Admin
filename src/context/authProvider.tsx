@@ -6,8 +6,6 @@ export type UserInformation = {
   name: string
   role: string
   email: string
-  permissions: string[]
-  avatar: string
 }
 type MyContextValue = {
   token: string | undefined
