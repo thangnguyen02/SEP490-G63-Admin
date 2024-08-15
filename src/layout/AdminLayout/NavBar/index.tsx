@@ -7,7 +7,7 @@ import {
   BellAlertIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline'
-import avatar from '../../../assets/images/avatar1.png'
+import avatar from '../../../assets/images/tdocman.jfif'
 import useViewport from '~/hooks/useViewport'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '~/context/authProvider'
@@ -115,7 +115,7 @@ const NavBar = () => {
               }}
               title={user?.name}
             />
-            <label className='font-bold cursor-pointer flex items-center gap-1'>{user?.name}</label>
+            <label className='font-bold cursor-pointer flex items-center gap-1'>TDocman System</label>
           </div>
           <button
             onClick={() => {
@@ -322,9 +322,7 @@ const NavBar = () => {
                   }}
                   title={user?.name}
                 />
-                <label className='font-bold cursor-pointer flex items-center gap-1 max-w-[120px] truncate ...'>
-                  {user?.name}
-                </label>
+                <label className='font-bold cursor-pointer flex items-center gap-1'>TDocman System</label>
               </div>
               <ArrowRightStartOnRectangleIcon
                 className='h-5 w-5 cursor-pointer'
