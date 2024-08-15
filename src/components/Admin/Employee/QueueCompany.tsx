@@ -132,12 +132,12 @@ const QueueCompany = () => {
       errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
     },
     onSuccess: (response) => {
-      if (response?.object?.code == '00') {
+      if (response?.code == '00') {
         successNotification('Gia hạn dịch vụ thành công')
         closeModal()
         refetch()
       } else {
-        errorNotification('Không thể gia hạn');
+        errorNotification('Không thể gia hạn')
       }
     }
   })
@@ -478,9 +478,10 @@ const QueueCompany = () => {
                         type='button'
                         className='middle  none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#ff00002f] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
                         data-ripple-light='true'
+                        disabled={approveExtendQuery?.isLoading}
                         onClick={() => handleApproveCompany()}
                       >
-                        Chấp nhận
+                        {approveExtendQuery?.isLoading ? <LoadingIcon /> : 'Chấp nhận'}
                       </button>
                       <button
                         type='button'
