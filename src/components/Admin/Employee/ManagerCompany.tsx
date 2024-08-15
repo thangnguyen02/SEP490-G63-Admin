@@ -124,6 +124,7 @@ const ManagerCompany = () => {
       formData.append('id', selectedCustomer?.id as string)
       formData.append('file', files)
       uploadQuery.mutate(formData)
+      refetch()
     }
   }
   const handlePageChange = (page: any) => {
