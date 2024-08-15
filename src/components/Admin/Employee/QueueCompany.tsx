@@ -131,10 +131,14 @@ const QueueCompany = () => {
     onError: (error: AxiosError<{ message: string }>) => {
       errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
     },
-    onSuccess: () => {
-      successNotification('Gia hạn dịch vụ thành công')
-      closeModal()
-      refetch()
+    onSuccess: (response) => {
+      if (response?.object?.code == '00') {
+        successNotification('Gia hạn dịch vụ thành công')
+        closeModal()
+        refetch()
+      } else {
+        errorNotification('Không thể gia hạn');
+      }
     }
   })
   const rejectExtendQuery = useMutation(rejectExtend, {
