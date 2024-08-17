@@ -10,7 +10,8 @@ import {
   EllipsisVerticalIcon,
   LockOpenIcon,
   PaperAirplaneIcon,
-  UserIcon
+  UserIcon,
+  ExclamationCircleIcon
 } from '@heroicons/react/24/outline'
 import { statusRule } from '~/common/const/status'
 import {
@@ -43,7 +44,8 @@ const statusList = [
     value: 'APPROVED',
     title: 'Đã xác nhận',
     color: 'text-green-700'
-  }
+  },
+  { value: 'REJECTED', title: 'Đã từ chối', color: 'text-red-700' }
 ]
 const statusListRender = {
   ['PROCESSING']: {
@@ -53,6 +55,10 @@ const statusListRender = {
   ['APPROVED']: {
     title: 'Đã xác nhận',
     color: 'text-green-700'
+  },
+  ['REJECTED']: {
+    title: 'Đã từ chối',
+    color: 'text-red-700'
   }
 }
 
@@ -125,10 +131,14 @@ const QueueCompany = () => {
     onError: (error: AxiosError<{ message: string }>) => {
       errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
     },
-    onSuccess: () => {
-      successNotification('Gia hạn dịch vụ thành công')
-      closeModal()
-      refetch()
+    onSuccess: (response) => {
+      if (response?.code == '00') {
+        successNotification('Gia hạn dịch vụ thành công')
+        closeModal()
+        refetch()
+      } else {
+        errorNotification('Không thể gia hạn')
+      }
     }
   })
   const rejectExtendQuery = useMutation(rejectExtend, {
@@ -136,7 +146,7 @@ const QueueCompany = () => {
       errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
     },
     onSuccess: () => {
-      successNotification('Gia hạn dịch vụ thành công')
+      successNotification('Từ chối gia hạn thành công')
       closeModal()
       refetch()
     }
@@ -326,13 +336,13 @@ const QueueCompany = () => {
                                   title='Hủy'
                                   onClick={() => {
                                     setSelectedCustomer(d)
-                                    setApproveModal(true)
+                                    setBanModal(true)
                                   }}
                                   className={`${
                                     active ? 'bg-blue-500 text-white' : 'text-gray-900'
                                   } group flex w-full items-center  gap-3 rounded-md px-2 py-2 text-sm `}
                                 >
-                                  <LockOpenIcon className='h-5' /> Từ chối
+                                  <ExclamationCircleIcon className='h-5' /> Từ chối
                                 </button>
                               )}
                             </Menu.Item>
@@ -468,9 +478,10 @@ const QueueCompany = () => {
                         type='button'
                         className='middle  none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-[#ff00002f] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
                         data-ripple-light='true'
+                        disabled={approveExtendQuery?.isLoading}
                         onClick={() => handleApproveCompany()}
                       >
-                        Chấp nhận
+                        {approveExtendQuery?.isLoading ? <LoadingIcon /> : 'Chấp nhận'}
                       </button>
                       <button
                         type='button'

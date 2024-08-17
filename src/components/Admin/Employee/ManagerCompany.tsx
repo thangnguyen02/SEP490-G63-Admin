@@ -99,7 +99,7 @@ const ManagerCompany = () => {
       }),
     {
       onSuccess: (result: any) => {
-        setTotalPage(result?.totalPages)
+        setTotalPage(result?.object?.totalPages)
       },
       onError: (error: AxiosError<{ message: string }>) => {
         errorNotification(error.response?.data?.message || 'Lỗi hệ thống')
