@@ -15,9 +15,7 @@ const AddNewUser = () => {
     handleSubmit,
     formState: { errors }
   } = useForm<FromType>()
-  const onSubmit: SubmitHandler<FromType> = (data) => {
-    console.log(data)
-  }
+  const onSubmit: SubmitHandler<FromType> = (data) => {}
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
