@@ -12,6 +12,8 @@ import LoadingPage from '~/components/shared/LoadingPage/LoadingPage.tsx'
 import Register from '~/components/Register.tsx'
 import Home from '~/pages/landing_page/Home.tsx'
 import Blogs from '~/pages/landing_page/Blogs.tsx'
+import Rule from '~/pages/landing_page/Rule.tsx'
+import Secure from '~/pages/landing_page/Secure.tsx'
 
 const Login = lazy(() => import('~/components/Login.tsx'))
 const Logout = lazy(() => import('~/components/Logout.tsx'))
@@ -128,6 +130,22 @@ const Routes = () => {
       element: (
         <Suspense fallback={<LoadingPage />}>
           <Blogs />
+        </Suspense>
+      )
+    },
+    {
+      path: '/rule',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <Rule />
+        </Suspense>
+      )
+    },
+    {
+      path: '/secure',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <Secure />
         </Suspense>
       )
     },
