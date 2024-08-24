@@ -14,16 +14,20 @@ export const NavbarLinks = [
     link: '/'
   },
   {
-    name: 'About',
-    link: '/about'
+    name: 'Blogs',
+    link: '/blogs'
   },
   {
     name: 'Blogs',
     link: '/blogs'
   },
   {
-    name: 'Best Places',
-    link: '/best-places'
+    name: 'Rule',
+    link: '/rule'
+  },
+  {
+    name: 'Secure',
+    link: '/Secure'
   }
 ]
 
@@ -60,16 +64,13 @@ const Navbar = () => {
                 </li>
                 <li className='py-4 flex justify-center items-center text-lg font-semibold'>
                   <GrServices className='mr-1' />
-                  <NavLink
-                    to='/best-places'
-                    style={({ isActive }) => (isActive ? { borderBottom: '4px solid blue' } : {})}
-                  >
+                  <NavLink to='/rule' style={({ isActive }) => (isActive ? { borderBottom: '4px solid blue' } : {})}>
                     Dịch vụ
                   </NavLink>
                 </li>
                 <li className='py-4 flex justify-center items-center text-lg font-semibold'>
                   <MdOutlineSecurity className='mr-1' />
-                  <NavLink to='/about' style={({ isActive }) => (isActive ? { borderBottom: '4px solid blue' } : {})}>
+                  <NavLink to='/secure' style={({ isActive }) => (isActive ? { borderBottom: '4px solid blue' } : {})}>
                     Điều khoản & Bảo mật
                   </NavLink>
                 </li>
