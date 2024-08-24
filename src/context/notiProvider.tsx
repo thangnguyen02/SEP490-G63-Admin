@@ -99,30 +99,6 @@ const NotifyProvider: React.FC<Props> = ({ children }) => {
   const loading = useMemo(() => {
     return getNotifyQuery.isLoading
   }, [getNotifyQuery.isLoading])
-  useEffect(() => {
-    const socket = new SockJS(`${BASE_URL}ws`)
-    getNotifyQuery.mutate(0)
-    const stompClient = Stomp.over(socket)
-    stompClient.connect({}, (frame: any) => {
-      console.log('Connected: ' + frame)
-      stompClient.subscribe(`/topic/notifications/${user?.email}`, (message) => {
-        if (message.body) {
-          setTotalNotRead((totalNotRead) => totalNotRead + 1)
-          setNotifications((prevNotifications) => [JSON.parse(message.body), ...prevNotifications])
-          inforNotification('📣 Bạn có một thông báo mới')
-          const audio = document.getElementById('notification-sound') as HTMLAudioElement
-          if (audio) {
-            audio.play()
-          }
-        }
-      })
-    })
-    return () => {
-      if (stompClient) {
-        stompClient.disconnect()
-      }
-    }
-  }, [user])
 
   const contextValue = useMemo(
     () => ({
