@@ -41,8 +41,8 @@ const Navbar = () => {
   return (
     <>
       <nav className='fixed top-0 right-0 w-full z-50 bg-white backdrop-blur-sm text-black shadow-md'>
-        <div className='container py-3 px-5 sm:py-0'>
-          <div className='flex justify-center items-center'>
+        <div className='container py-3 px-5 sm:py-0 mx-auto w-full'>
+          <div className='flex justify-between w-full'>
             <div className='flex items-center gap-4 py-1 font-bold text-2xl'>
               <Link to={'/'} onClick={() => window.scrollTo(0, 0)}>
                 <img src={Logo} alt='' className='h-16' />
