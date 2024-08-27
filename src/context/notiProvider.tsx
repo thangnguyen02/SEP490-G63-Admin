@@ -7,7 +7,7 @@ import { getNotification } from '~/services/user.service'
 import { deleteNotify, getNumberUnreadNotify, readNotify } from '~/services/notification.service'
 import { useMutation } from 'react-query'
 import useToast from '~/hooks/useToast'
-import NotiSound from '~/assets/noti.mp3'
+// import NotiSound from '~/assets/noti.mp3'
 
 export type NotificationData = {
   id: string
@@ -118,7 +118,7 @@ const NotifyProvider: React.FC<Props> = ({ children }) => {
 
   return (
     <>
-      <audio id='notification-sound' src={NotiSound} />
+      {/* <audio id='notification-sound' src={NotiSound} /> */}
       <NotifyContext.Provider value={contextValue}>{children}</NotifyContext.Provider>
     </>
   )
