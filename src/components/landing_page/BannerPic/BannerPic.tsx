@@ -7,7 +7,7 @@ const Contact = () => {
     <>
       {/* <span id='contact'></span> */}
       <div className='dark:bg-black dark:text-white py-14 mx-5 '>
-        <div className='container '>
+        <div className='container m-auto'>
           <div className='grid grid-cols-1 sm:grid-cols-3 gap-6 bg-dark py-8 px-6 bg-teal-500 rounded-md'>
             <div className='col-span-2 space-y-3'>
               <h1 className='text-4xl font-bold text-white'>ĐĂNG KÝ ĐỂ NHẬN TƯ VẤN MIỄN PHÍ</h1>

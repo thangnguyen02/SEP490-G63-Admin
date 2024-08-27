@@ -292,7 +292,7 @@ const QueueCompany = () => {
                       {statusListRender[d?.status]?.title}
                     </td>
                     <td className='px-2 py-2 text-center'>
-                      {d?.price == null ? 0 : (d?.price + '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                      {d?.amout == null ? 0 : (d?.amout + '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     </td>
                     <td className='px-2 py-2 text-center'>
                       <Menu as='div' className='relative inline-block text-left '>

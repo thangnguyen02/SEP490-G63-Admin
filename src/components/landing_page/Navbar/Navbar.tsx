@@ -14,16 +14,20 @@ export const NavbarLinks = [
     link: '/'
   },
   {
-    name: 'About',
-    link: '/about'
+    name: 'Blogs',
+    link: '/blogs'
   },
   {
     name: 'Blogs',
     link: '/blogs'
   },
   {
-    name: 'Best Places',
-    link: '/best-places'
+    name: 'Rule',
+    link: '/rule'
+  },
+  {
+    name: 'Secure',
+    link: '/Secure'
   }
 ]
 
@@ -37,8 +41,8 @@ const Navbar = () => {
   return (
     <>
       <nav className='fixed top-0 right-0 w-full z-50 bg-white backdrop-blur-sm text-black shadow-md'>
-        <div className='container py-3 px-5 sm:py-0'>
-          <div className='flex justify-center items-center'>
+        <div className='container py-3 px-5 sm:py-0 mx-auto w-full'>
+          <div className='flex justify-between w-full'>
             <div className='flex items-center gap-4 py-1 font-bold text-2xl'>
               <Link to={'/'} onClick={() => window.scrollTo(0, 0)}>
                 <img src={Logo} alt='' className='h-16' />
@@ -60,16 +64,13 @@ const Navbar = () => {
                 </li>
                 <li className='py-4 flex justify-center items-center text-lg font-semibold'>
                   <GrServices className='mr-1' />
-                  <NavLink
-                    to='/best-places'
-                    style={({ isActive }) => (isActive ? { borderBottom: '4px solid blue' } : {})}
-                  >
+                  <NavLink to='/rule' style={({ isActive }) => (isActive ? { borderBottom: '4px solid blue' } : {})}>
                     Dịch vụ
                   </NavLink>
                 </li>
                 <li className='py-4 flex justify-center items-center text-lg font-semibold'>
                   <MdOutlineSecurity className='mr-1' />
-                  <NavLink to='/about' style={({ isActive }) => (isActive ? { borderBottom: '4px solid blue' } : {})}>
+                  <NavLink to='/secure' style={({ isActive }) => (isActive ? { borderBottom: '4px solid blue' } : {})}>
                     Điều khoản & Bảo mật
                   </NavLink>
                 </li>
