@@ -179,7 +179,7 @@ const NavBar = () => {
         </div>
 
         <div className='flex items-center gap-4 '>
-          <Popover className='relative'>
+          {/* <Popover className='relative'>
             {({ open }) => (
               <>
                 <Popover.Button
@@ -296,7 +296,7 @@ const NavBar = () => {
                 </Transition>
               </>
             )}
-          </Popover>
+          </Popover> */}
 
           {isMobile ? (
             <UserIcon
